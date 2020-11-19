@@ -28,7 +28,6 @@ public class MainFrame extends JFrame {
 		JPanel northPanel = new JPanel();
 		northPanel.add(new JLabel("Bienvenue dans l'AL2000"));
 		
-		JScrollPane centerPanel = new JScrollPane();
 		JPanel scrollableMoviePane = new JPanel();
 		
 		for(int i = 0; i < this.al2000.getDvds().size(); i++) {
@@ -36,10 +35,10 @@ public class MainFrame extends JFrame {
 			MoviePanel curMoviePanel = new MoviePanel(curDVD.getUrlImage(), curDVD.getTitle());
 			scrollableMoviePane.add(curMoviePanel);
 		}
-		centerPanel.add(scrollableMoviePane);
+		JScrollPane centerPanel = new JScrollPane(scrollableMoviePane);
 		
 		mainPanel.add(northPanel, BorderLayout.NORTH);
-		mainPanel.add(scrollableMoviePane, BorderLayout.CENTER);
+		mainPanel.add(centerPanel, BorderLayout.CENTER);
 		
 		this.add(mainPanel);
 		this.pack();
