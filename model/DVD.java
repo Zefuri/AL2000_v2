@@ -5,14 +5,14 @@ import java.util.ArrayList;
 public class DVD {
 	private String title;
 	private Genre genre;
-	private String releaseDate;
+	private int releaseDate;
 	private String producer;
 	private ArrayList<String> actors;
 	private String summary;
 	private boolean dispoLoc;
 	private String urlImage;
 	
-	public DVD(String title, Genre genre, String releaseDate, String producer, ArrayList<String> actors, String summary, String urlImage) {
+	public DVD(String title, Genre genre, int releaseDate, String producer, ArrayList<String> actors, String summary, String urlImage) {
 		this.title = title;
 		this.genre = genre;
 		this.releaseDate = releaseDate;
@@ -39,11 +39,11 @@ public class DVD {
 		this.genre = genre;
 	}
 
-	public String getReleaseDate() {
+	public int getReleaseDate() {
 		return releaseDate;
 	}
 
-	public void setReleaseDate(String releaseDate) {
+	public void setReleaseDate(int releaseDate) {
 		this.releaseDate = releaseDate;
 	}
 
