@@ -2,17 +2,23 @@ drop table Signalement ;
 drop table Historique ;
 drop table Locations ;
 drop table Clients ;
+drop table Abonnes;
 drop table Techniciens ;
 drop table DVDs ;
 
 
 create table Clients (
-	idC number(3),
 	numCB varchar2(20),
 	email varchar2(20),
+	constraint Clients_C primary key (numCB, email)
+);
+
+create table Abonnes (
+	idA number(3),
+	email varchar2(20),
 	mdp varchar2(20),
-        credit number(3),
-	constraint Clients_C primary key (idC)
+    credit number,
+	constraint Abonnes_C primary key (idA)
 );
 
 
