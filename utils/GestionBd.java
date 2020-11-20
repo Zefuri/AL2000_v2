@@ -2,6 +2,7 @@ package utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,6 +14,7 @@ import java.util.Scanner;
 import model.AL2000;
 import model.DVD;
 import model.Genre;
+import model.Location;
 import model.Technicien;
 
 public final class GestionBd {
@@ -25,7 +27,9 @@ public final class GestionBd {
 	static Connection conn;
 	
 	public static String[] createqueries(String path) {
-		File data = new File(path);
+		DVD dvd = new DVD(null, null, 0, null, null, null, null);
+		URL url = dvd.getClass().getResource(path);
+		File data = new File(url.getPath());
 		String initbd = "";
 		String queries[] = null;
 		try {
@@ -35,17 +39,18 @@ public final class GestionBd {
 			}
 
 			queries = initbd.split(";");
-			//queries.remove();
+			reader.close();
 		}catch (FileNotFoundException e) {
 		      System.out.println("An error occurred.");
 		      e.printStackTrace();
 		    }
+
 		return queries;
 	}
 	
 	public static void initBD() {
-		String[] queriestable = createqueries("bd/data.sql");
-		String[] queriesdvd = createqueries("bd/initdvd.sql");
+		String[] queriestable = createqueries("/bd/data.sql");
+		String[] queriesdvd = createqueries("/bd/initdvd.sql");
 
 
 		try {
@@ -86,7 +91,8 @@ public final class GestionBd {
 
 			resultats = affichegard.executeQuery();
 			while (resultats.next()) {
-				//al.getClients().add(new Client());
+				ResultSet reqhistorique = null;
+				ArrayList<Location> histo = null;
 				
 			}
 
@@ -149,10 +155,7 @@ try {
 			
 			ResultSet resultats = null;
 
-			System.out.print("Loading Oracle driver... ");
-			System.out.println("loaded");
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
-			System.out.println("connected");
 
 			
 			PreparedStatement affichegard = conn
