@@ -53,7 +53,6 @@ public final class GestionBd {
 		String[] queriestable = createqueries("/bd/data.sql");
 		String[] queriesdvd = createqueries("/bd/initdvd.sql");
 
-
 		try {
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);

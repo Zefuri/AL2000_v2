@@ -9,4 +9,8 @@ public class Client {
 		this.numCB = numCB;
 		this.mail = mail;
 	}
+	
+	public boolean estAbonne() {
+		return false;
+	}
 }
