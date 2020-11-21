@@ -6,14 +6,14 @@ public class Abonne extends Client {
 	protected int credit;
 	protected ArrayList<Location> historique;
 	
-	public Abonne(String numCB, String mail) {
-		super(numCB, mail);
+	public Abonne(String numCB, String mail, int idc) {
+		super(numCB, mail, idc);
 		this.credit = 15;
 		this.historique = new ArrayList<>();
 	}
 
-	public Abonne(String numCB, String mail, int credit) throws SubscriptionException {
-		super(numCB, mail);
+	public Abonne(String numCB, String mail, int idc, int credit) throws SubscriptionException {
+		super(numCB, mail, idc);
 		if(credit >= 15) {
 			this.credit = credit;
 		} else {
@@ -22,6 +22,14 @@ public class Abonne extends Client {
 		this.historique = new ArrayList<>();
 	}
 	
+	public ArrayList<Location> getHistorique() {
+		return historique;
+	}
+
+	public void setHistorique(ArrayList<Location> historique) {
+		this.historique = historique;
+	}
+
 	public void rechargerCredit() {
 		this.credit += 10;
 	}

@@ -12,9 +12,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import model.AL2000;
+import model.Abonne;
+import model.BdIncoherenteException;
 import model.DVD;
 import model.Genre;
 import model.Location;
+import model.SubscriptionException;
 import model.Technicien;
 
 public final class GestionBd {
@@ -27,7 +30,7 @@ public final class GestionBd {
 	static Connection conn;
 	
 	public static String[] createqueries(String path) {
-		DVD dvd = new DVD(null, null, 0, null, null, null, null);
+		DVD dvd = new DVD(0, null, null, 0, null, null, null, null);
 		URL url = dvd.getClass().getResource(path);
 		File data = new File(url.getPath());
 		String initbd = "";
@@ -75,7 +78,12 @@ public final class GestionBd {
 			}
 	}
 	
-	public static void initclients(AL2000 al) {
+	public static void initclients(AL2000 al) throws BdIncoherenteException {
+		//Les DVD de l'al2000 doit être initialisé avant d'utiliser cette fonction
+		if(al.getDvds() == null) {
+			System.out.println("initclients doit être utilisé avec un al200 ayant ses dvds initialisés");
+			return;
+		}
 		try {
 			
 			ResultSet resultats = null;
@@ -86,16 +94,36 @@ public final class GestionBd {
 			System.out.println("connected");
 
 			
-			PreparedStatement affichegard = conn
+			PreparedStatement getclients = conn
 					.prepareStatement("SELECT * FROM CLIENTS");
-
-			resultats = affichegard.executeQuery();
+			ArrayList<Abonne> abos = new ArrayList<Abonne>();
+			resultats = getclients.executeQuery();
 			while (resultats.next()) {
-				ResultSet reqhistorique = null;
-				ArrayList<Location> histo = null;
-				
+				ResultSet reqhisto = null;
+				Abonne abo = new Abonne(resultats.getString("numCB"), resultats.getString("email"), resultats.getInt("idc"), resultats.getInt("credit"));
+				ArrayList<Location> histo = new ArrayList<Location>();
+				PreparedStatement getloc = conn.prepareStatement("Select * FROM LOCATIONS WHERE idClient = ?");
+				getloc.setInt(1, resultats.getInt("idc"));
+				reqhisto = getloc.executeQuery();
+				while(reqhisto.next()) {
+					int idD = reqhisto.getInt("idDvd");
+					DVD dvdloc = null;
+					for(DVD dvd : al.getDvds()) {
+						if(dvd.getId() == idD) {
+							dvdloc = dvd;
+						}
+					}
+					if(dvdloc == null) {
+						throw new BdIncoherenteException("Location incohérente");
+					}
+					
+					histo.add(new Location(abo, dvdloc, reqhisto.getDate("dateLocation")));
+				}
+				abo.setHistorique(histo);
+				abos.add(abo);
 			}
-
+			
+			al.setAbonnes(abos);
 			conn.close();
 
 			System.out.println("bye.");
@@ -110,6 +138,9 @@ public final class GestionBd {
 			System.out.println("Affichage du code d'erreur");
 			System.out.println(e.getErrorCode());
 
+		} catch (SubscriptionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
@@ -168,7 +199,7 @@ try {
 				for(String str : act) {
 					actors.add(str);
 				}
-				al.getDvds().add(new DVD(resultats.getString("title"), Genre.valueOf(resultats.getString("genre").toUpperCase()), resultats.getInt("releaseYear"), 
+				al.getDvds().add(new DVD(resultats.getInt("idD"), resultats.getString("title"), Genre.valueOf(resultats.getString("genre").toUpperCase()), resultats.getInt("releaseYear"), 
 						resultats.getString("producer"), actors, resultats.getString("summary"), resultats.getString("urlImage")));
 			}
 

@@ -12,6 +12,14 @@ public class Location {
 		this.dvd = dvd;
 		this.date = new Date();
 	}
+	
+	public Location(Client client, DVD dvd, Date date) {
+		this.client = client;
+		this.dvd = dvd;
+		this.date = date;
+	}
+	
+	
 
 	public Client getClient() {
 		return client;

@@ -6,6 +6,7 @@ import java.util.HashMap;
 public class AL2000 {
 	private Mode mode;
 	private ArrayList<Client> clients;
+	private ArrayList<Abonne> Abonnes;
 	private HashMap<Integer, Technicien> techniciens;
 	private ArrayList<DVD> dvds;
 	private ArrayList<Signalement> signalements;
@@ -16,6 +17,14 @@ public class AL2000 {
 		this.techniciens = new HashMap<>();
 		this.dvds = new ArrayList<>();
 		this.signalements = new ArrayList<>();
+	}
+	
+	public ArrayList<Abonne> getAbonnes() {
+		return Abonnes;
+	}
+
+	public void setAbonnes(ArrayList<Abonne> abonnes) {
+		Abonnes = abonnes;
 	}
 	
 	public Mode getMode() {

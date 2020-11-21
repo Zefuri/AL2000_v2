@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class DVD {
+	private int id;
 	private String title;
 	private Genre genre;
 	private int releaseDate;
@@ -12,7 +13,8 @@ public class DVD {
 	private boolean dispoLoc;
 	private String urlImage;
 	
-	public DVD(String title, Genre genre, int releaseDate, String producer, ArrayList<String> actors, String summary, String urlImage) {
+	public DVD(int id, String title, Genre genre, int releaseDate, String producer, ArrayList<String> actors, String summary, String urlImage) {
+		this.id = id;
 		this.title = title;
 		this.genre = genre;
 		this.releaseDate = releaseDate;
@@ -21,6 +23,14 @@ public class DVD {
 		this.summary = summary;
 		this.urlImage = urlImage;
 		this.dispoLoc = false;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getTitle() {
