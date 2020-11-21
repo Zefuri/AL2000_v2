@@ -35,4 +35,8 @@ public class Client {
 	public void setIdc(int idc) {
 		this.idc = idc;
 	}
+	
+	public boolean estAbonne() {
+		return false;
+	}
 }

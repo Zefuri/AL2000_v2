@@ -2,13 +2,22 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JToolBar;
 
 import model.AL2000;
+import model.Abonne;
 import model.DVD;
 
 public class MainFrame extends JFrame {
@@ -37,12 +46,106 @@ public class MainFrame extends JFrame {
 		}
 		JScrollPane centerPanel = new JScrollPane(scrollableMoviePane);
 		
+		JToolBar southToolBar = new JToolBar();
+		
+		southToolBar.add(userConnectionButtonAction());
+		southToolBar.add(switchToTechModeButtonAction());
+		
 		mainPanel.add(northPanel, BorderLayout.NORTH);
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
+		mainPanel.add(southToolBar, BorderLayout.SOUTH);
 		
 		this.add(mainPanel);
 		this.pack();
 		this.setVisible(true);
 	}
+	
+	private AbstractAction userConnectionButtonAction() {
+		
+		return new AbstractAction("Connexion") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame connectionFrame = new JFrame("Connexion");
+				connectionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				connectionFrame.setPreferredSize(new Dimension(300, 150));
+				
+				JPanel mainPanel = new JPanel(new BorderLayout());
+				
+				JPanel centerPanel = new JPanel();
+				
+				JPanel idPanel = new JPanel();
+				JLabel idLabel = new JLabel("ID Utilisateur : ");
+				JTextField idField = new JTextField();
+				idField.setPreferredSize(new Dimension(150, 25));
+				
+				idPanel.add(idLabel);
+				idPanel.add(idField);
+				
+				JPanel pwdPanel = new JPanel();
+				JLabel pwdLabel = new JLabel("Mot de passe : ");
+				JPasswordField pwdField = new JPasswordField();
+				pwdField.setPreferredSize(new Dimension(150, 25));
+				
+				pwdPanel.add(pwdLabel);
+				pwdPanel.add(pwdField);
+				
+				centerPanel.add(idPanel);
+				centerPanel.add(pwdPanel);
+				
+				JPanel southPanel = new JPanel();
+				
+				JButton validate = new JButton(new AbstractAction("Valider") {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						int id = Integer.parseInt(idField.getText());
+						String pwd = pwdField.getSelectedText();
+						
+						if(al2000.getClients().size() > id && al2000.getClients().get(id).estAbonne()) {
+							if(((Abonne) al2000.getClients().get(id)).verifierMdp(pwd)) {
+								// TODO implements new SubscriberFrame
+								connectionFrame.dispose();
+							} else {
+								System.err.println("Mot de passe incorrect : réessayez !");
+							}
+						} else {
+							System.err.println("Client introuvable ou non abonné au service !");
+							connectionFrame.dispose();
+						}
+					}
+				});
+				
+				JButton cancel = new JButton(new AbstractAction("Annuler") {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						connectionFrame.dispose();
+					}
+				});
+				
+				southPanel.add(validate);
+				southPanel.add(cancel);
 
+				mainPanel.add(centerPanel, BorderLayout.CENTER);
+				mainPanel.add(southPanel, BorderLayout.SOUTH);
+				
+				connectionFrame.add(mainPanel);
+				connectionFrame.pack();
+				connectionFrame.setVisible(true);
+			}
+		};
+	}
+
+	private AbstractAction switchToTechModeButtonAction() {
+
+		return new AbstractAction("Maintenance") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Fonction à venir");
+				// TODO implements (factoriser le code ?)
+			}
+		};
+	}
 }

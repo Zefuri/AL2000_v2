@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Abonne extends Client {
 	protected int credit;
+	protected String mdp;
 	protected ArrayList<Location> historique;
 	
 	public Abonne(String numCB, String mail, int idc) {
@@ -40,5 +41,14 @@ public class Abonne extends Client {
 		} else {
 			throw new SubscriptionException("Le montant de recharge minimum est de 10€ !");
 		}
+	}
+	
+	public boolean verifierMdp(String mdp) {
+		return (this.mdp.compareTo(mdp) == 0 ? true : false);
+	}
+	
+	@Override
+	public boolean estAbonne() {
+		return true;
 	}
 }

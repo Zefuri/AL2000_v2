@@ -2,7 +2,9 @@ package utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+
 import java.net.URL;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,7 +23,6 @@ import model.SubscriptionException;
 import model.Technicien;
 
 public final class GestionBd {
-	
 	
 	static final String CONN_URL = "jdbc:oracle:thin:@im2ag-oracle.e.ujf-grenoble.fr:1521:im2ag";
 
@@ -54,7 +55,6 @@ public final class GestionBd {
 	public static void initBD() {
 		String[] queriestable = createqueries("/bd/data.sql");
 		String[] queriesdvd = createqueries("/bd/initdvd.sql");
-
 
 		try {
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
