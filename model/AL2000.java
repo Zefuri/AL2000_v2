@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AL2000 {
+
+
+
 	private Mode mode;
 	private ArrayList<Client> clients;
 	private ArrayList<Abonne> Abonnes;
@@ -16,6 +19,7 @@ public class AL2000 {
 		this.clients = new ArrayList<>();
 		this.techniciens = new HashMap<>();
 		this.dvds = new ArrayList<>();
+		this.Abonnes = new ArrayList<>();
 		this.signalements = new ArrayList<>();
 	}
 	
@@ -65,6 +69,12 @@ public class AL2000 {
 
 	public void setSignalements(ArrayList<Signalement> signalements) {
 		this.signalements = signalements;
+	}
+	
+	@Override
+	public String toString() {
+		return "AL2000 [mode=" + mode + ", clients=" + clients + "\n" + ", Abonnes=" + Abonnes + "\n" + ", techniciens=" + (techniciens==null)+ "\n"
+				+ ", dvds=" + (dvds == null)+ "\n" + ", signalements=" + (signalements== null)+ "\n" + "]";
 	}
 
 	public void modeMaintenance(int idTech, String mdp) throws WrongPasswordException {

@@ -1,17 +1,25 @@
-drop table Signalement ;
-drop table Historique ;
-drop table Locations ;
-drop table Clients ;
-drop table Techniciens ;
-drop table DVDs ;
+drop table Signalement;
+drop table Locations;
+drop table Historique;
+drop table Client;
+drop table Techniciens;
+drop table Abonne;
+drop table DVDs;
 
 
-create table Clients (
+create table Abonne (
 	idC number(3),
+	email varchar2(50),
 	numCB varchar2(20),
-	email varchar2(20),
 	mdp varchar2(20),
         credit number(3),
+	constraint Abonne_C primary key (idC)
+);
+
+create table Client (
+	idC number(3),
+	email varchar(50),
+	numCB varchar(20),
 	constraint Clients_C primary key (idC)
 );
 
@@ -36,24 +44,24 @@ create table DVDs (
 
 
 create table Locations (
-        idLocation number(3),
+        idLocation number(10),
         idDvd number(3),
 	idClient number(3),
 	dateLocation date,
 	constraint Locations_C primary key (idLocation),
 	constraint Locations_C1 foreign key (idDvd) references DVDs (idD),
-        constraint Locations_C2 foreign key (idClient) references Clients (idC)
+        constraint Locations_C2 foreign key (idClient) references Abonne (idC)
 );
 
 create table Historique (
-        idLocation number(3),
+        idLocation number(10),
         idDvd number(3),
 	idClient number(3),
 	dateLocation date,
 	dateRetour date,
 	constraint Historique_C primary key (idLocation),
 	constraint Historique_C1 foreign key (idDvd) references DVDs (idD),
-        constraint Historique_C2 foreign key (idClient) references Clients (idC)
+        constraint Historique_C2 foreign key (idClient) references Abonne (idC)
 );
 
 create table Signalement (

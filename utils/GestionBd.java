@@ -35,32 +35,49 @@ public final class GestionBd {
 	
 	/**
 	* reset the attribute of an object AL2000 with the database
+	* l'al2000 must be empty otherwise the behavior of this method is undefined
 	*
 	* @param  al  the AL2000 object that should be reset
 	* @throws BdIncoherenteException if the database is not in a coherent state, should not happened but we never know. Consider resetting the data base if it happens.
 	*/	
-	public static void resetAl2000(AL2000 al) throws BdIncoherenteException {
-		al = new AL2000();
+	public static void initAl2000(AL2000 al) throws BdIncoherenteException {
 		initdvd(al);
-		initclients(al);
+		initAbonne(al);
+		initClient(al);
 		initSignalements(al);
 		initTech(al);
+		System.out.println("Init al2000 done");
 		
 	}
 	
 	/**
 	 * 
-	 *Initialize the oracle database with the sql script in the package bd
+	 *Initialize the oracle database with the sql scripts in the package bd
 	*/
 	public static void initBD() {
 		System.out.println("Begining BD init");
-		String[] queriestable = createqueries("/bd/data.sql");
-		String[] queriesdvd = createqueries("/bd/initdvd.sql");
-
+		ArrayList<String[]> listqueries = new ArrayList<>();
+		listqueries.add(createqueries("/bd/data.sql"));
+		listqueries.add(createqueries("/bd/initdvd.sql"));
+		listqueries.add(createqueries("/bd/initClients.sql"));
+		listqueries.add(createqueries("/bd/initLoc.sql"));
+		listqueries.add(createqueries("/bd/initHisto.sql"));
+		listqueries.add(createqueries("/bd/initSignal.sql"));
+		
+		
 		try {
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
-			for (String query : queriestable) {
+			for(String[] str : listqueries) {
+				for (String query : str) {
+					System.out.println(query + "à faire");
+					PreparedStatement createbd = conn.prepareStatement(query);
+					createbd.executeUpdate();
+					System.out.println(query + "done");
+				}
+			}
+
+			/*for (String query : queriestable) {
 				System.out.println(query + "à faire");
 				PreparedStatement createbd = conn.prepareStatement(query);
 				createbd.executeUpdate();
@@ -72,11 +89,42 @@ public final class GestionBd {
 				PreparedStatement createbd = conn.prepareStatement(query);
 				createbd.executeUpdate();
 				System.out.println(query + "done");
-			}
+			}*/
 			conn.close();
 			System.out.println("Bd init done");
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private static void initClient(AL2000 al) {
+		try {
+			System.out.println("Begining Client init");
+			ResultSet resultats = null;
+
+			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
+
+			PreparedStatement affichegard = conn.prepareStatement("SELECT * FROM Client");
+
+			resultats = affichegard.executeQuery();
+			while (resultats.next()) {
+				al.getClients().add(new Client(resultats.getString("numCB"), resultats.getString("email"), resultats.getInt("idC")));
+
+			}
+
+			conn.close();
+			System.out.println("Client init done");
+
+			// traitement d'exception
+		} catch (SQLException e) {
+			System.err.println("failed");
+			System.out.println("Affichage de la pile d'erreur");
+			e.printStackTrace(System.err);
+			System.out.println("Affichage du message d'erreur");
+			System.out.println(e.getMessage());
+			System.out.println("Affichage du code d'erreur");
+			System.out.println(e.getErrorCode());
+
 		}
 	}
 
@@ -103,9 +151,9 @@ public final class GestionBd {
 	}
 	
 
-	private static void initclients(AL2000 al) throws BdIncoherenteException {
+	private static void initAbonne(AL2000 al) throws BdIncoherenteException {
 		// Les DVD de l'al2000 doit être initialisé avant d'utiliser cette fonction
-		System.out.println("Begining client init");
+		System.out.println("Begining Abonne init");
 		if (al.getDvds() == null) {
 			System.out.println("initclients doit être utilisé avec un al200 ayant ses dvds initialisés");
 			return;
@@ -116,9 +164,9 @@ public final class GestionBd {
 
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
 
-			PreparedStatement getclients = conn.prepareStatement("SELECT * FROM CLIENTS");
+			PreparedStatement getAbo = conn.prepareStatement("SELECT * FROM Abonne");
 			ArrayList<Abonne> abos = new ArrayList<Abonne>();
-			resultats = getclients.executeQuery();
+			resultats = getAbo.executeQuery();
 			while (resultats.next()) {
 				ResultSet reqhisto = null;
 				Abonne abo = new Abonne(resultats.getString("numCB"), resultats.getString("email"),
@@ -148,7 +196,7 @@ public final class GestionBd {
 			al.setAbonnes(abos);
 			conn.close();
 
-			System.out.println("client init done");
+			System.out.println("Abonne init done");
 
 			// traitement d'exception
 		} catch (SQLException e) {
@@ -225,7 +273,7 @@ public final class GestionBd {
 
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
 
-			PreparedStatement affichegard = conn.prepareStatement("SELECT * FROM Technicien");
+			PreparedStatement affichegard = conn.prepareStatement("SELECT * FROM Techniciens");
 
 			resultats = affichegard.executeQuery();
 			while (resultats.next()) {
@@ -234,7 +282,7 @@ public final class GestionBd {
 			}
 
 			conn.close();
-			System.out.println("Technicien int done");
+			System.out.println("Technicien init done");
 
 			// traitement d'exception
 		} catch (SQLException e) {

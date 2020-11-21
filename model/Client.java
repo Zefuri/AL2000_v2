@@ -1,6 +1,11 @@
 package model;
 
 public class Client {
+	@Override
+	public String toString() {
+		return "Client [numCB=" + numCB + ", mail=" + mail + ", idc=" + idc + "]";
+	}
+
 	protected static int NB_LOCATION = 1;
 	protected String numCB;
 	protected String mail;

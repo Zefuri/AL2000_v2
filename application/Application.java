@@ -16,13 +16,15 @@ public class Application {
 	
 
 	public static void main(String[] args) {
-		// GestionBd.initBD();
+		//GestionBd.initBD();
 		AL2000 al2000 = new AL2000();
 		try {
-			GestionBd.resetAl2000(al2000);
+			GestionBd.initAl2000(al2000);
 		} catch (BdIncoherenteException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println(al2000);
 
 		/*ArrayList<DVD> dvds = new ArrayList<DVD>();
 		dvds.add(new DVD("The Godfather", Genre.DRAME, 2000, "", new ArrayList<String>(), "", "godfather.jpg"));

@@ -1,6 +1,11 @@
 package model;
 
 public class Technicien {
+	@Override
+	public String toString() {
+		return "Technicien [al2000=" + al2000 + ", mdp=" + mdp + "]";
+	}
+
 	private AL2000 al2000;
 	private String mdp;
 	

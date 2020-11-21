@@ -3,6 +3,13 @@ package model;
 import java.util.ArrayList;
 
 public class DVD {
+	@Override
+	public String toString() {
+		return "DVD [id=" + id + ", title=" + title + ", genre=" + genre + ", releaseDate=" + releaseDate
+				+ ", producer=" + producer + ", actors=" + actors + ", summary=" + summary + ", dispoLoc=" + dispoLoc
+				+ ", urlImage=" + urlImage + "]";
+	}
+
 	private int id;
 	private String title;
 	private Genre genre;

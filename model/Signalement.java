@@ -1,6 +1,11 @@
 package model;
 
 public class Signalement {
+	@Override
+	public String toString() {
+		return "Signalement [location=" + location + ", motif=" + motif + "]";
+	}
+
 	private Location location;
 	private String motif;
 	

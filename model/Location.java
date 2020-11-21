@@ -3,6 +3,11 @@ package model;
 import java.util.Date;
 
 public class Location {
+	@Override
+	public String toString() {
+		return "Location [id=" + id + ", client=" + client + ", dvd=" + dvd + ", date=" + date + "]";
+	}
+
 	private int id;
 	private Client client;
 	private DVD dvd;
