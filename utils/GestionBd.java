@@ -16,9 +16,11 @@ import java.util.Scanner;
 import model.AL2000;
 import model.Abonne;
 import model.BdIncoherenteException;
+import model.Client;
 import model.DVD;
 import model.Genre;
 import model.Location;
+import model.Signalement;
 import model.SubscriptionException;
 import model.Technicien;
 
@@ -29,29 +31,27 @@ public final class GestionBd {
 	static final String USER = "demarquq";
 	static final String PASSWD = "Cork1440safety";
 	static Connection conn;
-
-	public static String[] createqueries(String path) {
-		DVD dvd = new DVD(0, null, null, 0, null, null, null, null);
-		URL url = dvd.getClass().getResource(path);
-		File data = new File(url.getPath());
-		String initbd = "";
-		String queries[] = null;
-		try {
-			Scanner reader = new Scanner(data);
-			while (reader.hasNextLine()) {
-				initbd += reader.nextLine();
-			}
-
-			queries = initbd.split(";");
-			reader.close();
-		} catch (FileNotFoundException e) {
-			System.out.println("An error occurred.");
-			e.printStackTrace();
-		}
-
-		return queries;
+	
+	
+	/**
+	* reset the attribute of an object AL2000 with the database
+	*
+	* @param  al  the AL2000 object that should be reset
+	* @throws BdIncoherenteException if the database is not in a coherent state, should not happened but we never know. Consider resetting the data base if it happens.
+	*/	
+	public static void resetAl2000(AL2000 al) throws BdIncoherenteException {
+		al = new AL2000();
+		initdvd(al);
+		initclients(al);
+		initSignalements(al);
+		initTech(al);
+		
 	}
-
+	
+	/**
+	 * 
+	 *Initialize the oracle database with the sql script in the package bd
+	*/
 	public static void initBD() {
 		System.out.println("Begining BD init");
 		String[] queriestable = createqueries("/bd/data.sql");
@@ -80,7 +80,30 @@ public final class GestionBd {
 		}
 	}
 
-	public static void initclients(AL2000 al) throws BdIncoherenteException {
+	private static String[] createqueries(String path) {
+		DVD dvd = new DVD(0, null, null, 0, null, null, null, null);
+		URL url = dvd.getClass().getResource(path);
+		File data = new File(url.getPath());
+		String initbd = "";
+		String queries[] = null;
+		try {
+			Scanner reader = new Scanner(data);
+			while (reader.hasNextLine()) {
+				initbd += reader.nextLine();
+			}
+
+			queries = initbd.split(";");
+			reader.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+
+		return queries;
+	}
+	
+
+	private static void initclients(AL2000 al) throws BdIncoherenteException {
 		// Les DVD de l'al2000 doit être initialisé avant d'utiliser cette fonction
 		System.out.println("Begining client init");
 		if (al.getDvds() == null) {
@@ -143,19 +166,40 @@ public final class GestionBd {
 		}
 	}
 	
-	private static void initSignalements() {
+	private static void initSignalements(AL2000 al) throws BdIncoherenteException {
 		try {
 			System.out.println("Begining Signalements init");
+			if (al.getDvds() == null || al.getClients() == null) {
+				System.out.println("Signalement doit être utilisé avec un al200 ayant ses dvds et ses clients initialisés");
+				return;
+			}
 
 			ResultSet resultats = null;
-
+			ArrayList<Signalement> signalements = new ArrayList<Signalement>();
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
 
 			PreparedStatement getsignal = conn.prepareStatement("SELECT * FROM Signalement");
 			
 			resultats = getsignal.executeQuery();
 			while (resultats.next()) {
+				int idloc = resultats.getInt("idLocation");
+				Location loc = null;
+				for(Abonne abo : al.getAbonnes()) {
+					for(Location loca : abo.getHistorique()) {
+						if(loca.getId() == idloc) {
+							loc = loca;
+						}
+					}
+					if(loc == null) {
+						throw new BdIncoherenteException("Signalement incohérente");
+					}
+					signalements.add(new Signalement(loc, resultats.getString("signalement")));
+
+					
+				}
 			}
+			
+			al.setSignalements(signalements);
 
 			conn.close();
 			System.out.println("Signalement init done");
@@ -174,7 +218,7 @@ public final class GestionBd {
 		}
 	}
 
-	public static void initTech(AL2000 al) {
+	private static void initTech(AL2000 al) {
 		try {
 			System.out.println("Begining Technicien init");
 			ResultSet resultats = null;
@@ -205,7 +249,7 @@ public final class GestionBd {
 		}
 	}
 
-	public static void initdvd(AL2000 al) {
+	private static void initdvd(AL2000 al) {
 		try {
 			System.out.println("Begining dvd init");
 			ResultSet resultats = null;
