@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import Errors.WrongPasswordException;
+
 public class AL2000 {
 
 
@@ -75,6 +77,16 @@ public class AL2000 {
 	public String toString() {
 		return "AL2000 [mode=" + mode + ", clients=" + clients + "\n" + ", Abonnes=" + Abonnes + "\n" + ", techniciens=" + (techniciens==null)+ "\n"
 				+ ", dvds=" + (dvds == null)+ "\n" + ", signalements=" + (signalements== null)+ "\n" + "]";
+	}
+	
+	public boolean dvdexist(int idDvd) {
+		for (DVD dvd : this.dvds) {
+			if(dvd.getId() == idDvd) {
+				return true;
+			}
+		}
+		return false;
+		
 	}
 
 	public void modeMaintenance(int idTech, String mdp) throws WrongPasswordException {

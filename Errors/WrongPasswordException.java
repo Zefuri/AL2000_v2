@@ -1,4 +1,4 @@
-package model;
+package Errors;
 
 public class WrongPasswordException extends Exception {
 

@@ -2,11 +2,11 @@ package application;
 
 import java.util.ArrayList;
 
+import Errors.BdIncoherenteException;
 import model.AL2000;
-import model.BdIncoherenteException;
 import model.DVD;
 import model.Genre;
-import utils.GestionBd;
+import utils.InitBd;
 import view.MainFrame;
 
 public class Application {
@@ -19,7 +19,7 @@ public class Application {
 		//GestionBd.initBD();
 		AL2000 al2000 = new AL2000();
 		try {
-			GestionBd.initAl2000(al2000);
+			InitBd.initAl2000(al2000);
 		} catch (BdIncoherenteException e) {
 			e.printStackTrace();
 		}

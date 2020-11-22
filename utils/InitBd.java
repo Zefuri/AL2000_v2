@@ -13,33 +13,35 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Errors.BdIncoherenteException;
+import Errors.SubscriptionException;
 import model.AL2000;
 import model.Abonne;
-import model.BdIncoherenteException;
 import model.Client;
 import model.DVD;
 import model.Genre;
 import model.Location;
 import model.Signalement;
-import model.SubscriptionException;
 import model.Technicien;
 
-public final class GestionBd {
+public final class InitBd {
 
 	static final String CONN_URL = "jdbc:oracle:thin:@im2ag-oracle.e.ujf-grenoble.fr:1521:im2ag";
 
 	static final String USER = "demarquq";
 	static final String PASSWD = "Cork1440safety";
 	static Connection conn;
-	
-	
+
 	/**
-	* reset the attribute of an object AL2000 with the database
-	* l'al2000 must be empty otherwise the behavior of this method is undefined
-	*
-	* @param  al  the AL2000 object that should be reset
-	* @throws BdIncoherenteException if the database is not in a coherent state, should not happened but we never know. Consider resetting the data base if it happens.
-	*/	
+	 * reset the attribute of an object AL2000 with the database l'al2000 must be
+	 * empty otherwise the behavior of this method is undefined
+	 *
+	 * @param al the AL2000 object that should be reset
+	 * @throws BdIncoherenteException if the database is not in a coherent state,
+	 *                                should not happened but we never know.
+	 *                                Consider resetting the data base if it
+	 *                                happens.
+	 */
 	public static void initAl2000(AL2000 al) throws BdIncoherenteException {
 		initdvd(al);
 		initAbonne(al);
@@ -47,13 +49,13 @@ public final class GestionBd {
 		initSignalements(al);
 		initTech(al);
 		System.out.println("Init al2000 done");
-		
+
 	}
-	
+
 	/**
 	 * 
-	 *Initialize the oracle database with the sql scripts in the package bd
-	*/
+	 * Initialize the oracle database with the sql scripts in the package bd
+	 */
 	public static void initBD() {
 		System.out.println("Begining BD init");
 		ArrayList<String[]> listqueries = new ArrayList<>();
@@ -63,40 +65,24 @@ public final class GestionBd {
 		listqueries.add(createqueries("/bd/initLoc.sql"));
 		listqueries.add(createqueries("/bd/initHisto.sql"));
 		listqueries.add(createqueries("/bd/initSignal.sql"));
-		
-		
+
 		try {
 			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
-			for(String[] str : listqueries) {
+			for (String[] str : listqueries) {
 				for (String query : str) {
-					System.out.println(query + "à faire");
 					PreparedStatement createbd = conn.prepareStatement(query);
 					createbd.executeUpdate();
 					System.out.println(query + "done");
 				}
 			}
-
-			/*for (String query : queriestable) {
-				System.out.println(query + "à faire");
-				PreparedStatement createbd = conn.prepareStatement(query);
-				createbd.executeUpdate();
-				System.out.println(query + "done");
-			}
-
-			for (String query : queriesdvd) {
-				System.out.println(query + "à faire");
-				PreparedStatement createbd = conn.prepareStatement(query);
-				createbd.executeUpdate();
-				System.out.println(query + "done");
-			}*/
 			conn.close();
 			System.out.println("Bd init done");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static void initClient(AL2000 al) {
 		try {
 			System.out.println("Begining Client init");
@@ -108,7 +94,8 @@ public final class GestionBd {
 
 			resultats = affichegard.executeQuery();
 			while (resultats.next()) {
-				al.getClients().add(new Client(resultats.getString("numCB"), resultats.getString("email"), resultats.getInt("idC")));
+				al.getClients().add(new Client(resultats.getString("numCB"), resultats.getString("email"),
+						resultats.getInt("idC")));
 
 			}
 
@@ -149,7 +136,6 @@ public final class GestionBd {
 
 		return queries;
 	}
-	
 
 	private static void initAbonne(AL2000 al) throws BdIncoherenteException {
 		// Les DVD de l'al2000 doit être initialisé avant d'utiliser cette fonction
@@ -170,10 +156,14 @@ public final class GestionBd {
 			while (resultats.next()) {
 				ResultSet reqhisto = null;
 				Abonne abo = new Abonne(resultats.getString("numCB"), resultats.getString("email"),
-						resultats.getInt("idc"), resultats.getInt("credit"));
+						resultats.getInt("idc"), resultats.getInt("credit"), resultats.getString("mdp"));
+
 				ArrayList<Location> histo = new ArrayList<Location>();
-				PreparedStatement getloc = conn.prepareStatement("Select * FROM LOCATIONS WHERE idClient = ?");
+
+				PreparedStatement getloc = conn.prepareStatement("Select * FROM LOCATIONS WHERE idAbonne = ?");
+
 				getloc.setInt(1, resultats.getInt("idc"));
+
 				reqhisto = getloc.executeQuery();
 				while (reqhisto.next()) {
 					int idD = reqhisto.getInt("idDvd");
@@ -187,8 +177,10 @@ public final class GestionBd {
 						throw new BdIncoherenteException("Location incohérente");
 					}
 
-					histo.add(new Location(reqhisto.getInt("idLocation"), abo, dvdloc, reqhisto.getDate("dateLocation")));
+					histo.add(
+							new Location(reqhisto.getInt("idLocation"), abo, dvdloc, reqhisto.getDate("dateLocation")));
 				}
+
 				abo.setHistorique(histo);
 				abos.add(abo);
 			}
@@ -213,12 +205,13 @@ public final class GestionBd {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static void initSignalements(AL2000 al) throws BdIncoherenteException {
 		try {
 			System.out.println("Begining Signalements init");
 			if (al.getDvds() == null || al.getClients() == null) {
-				System.out.println("Signalement doit être utilisé avec un al200 ayant ses dvds et ses clients initialisés");
+				System.out.println(
+						"Signalement doit être utilisé avec un al200 ayant ses dvds et ses clients initialisés");
 				return;
 			}
 
@@ -227,31 +220,29 @@ public final class GestionBd {
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
 
 			PreparedStatement getsignal = conn.prepareStatement("SELECT * FROM Signalement");
-			
+
 			resultats = getsignal.executeQuery();
 			while (resultats.next()) {
 				int idloc = resultats.getInt("idLocation");
 				Location loc = null;
-				for(Abonne abo : al.getAbonnes()) {
-					for(Location loca : abo.getHistorique()) {
-						if(loca.getId() == idloc) {
+				for (Abonne abo : al.getAbonnes()) {
+					for (Location loca : abo.getHistorique()) {
+						if (loca.getId() == idloc) {
 							loc = loca;
 						}
 					}
-					if(loc == null) {
-						throw new BdIncoherenteException("Signalement incohérente");
-					}
-					signalements.add(new Signalement(loc, resultats.getString("signalement")));
-
-					
 				}
+				if (loc == null) {
+					throw new BdIncoherenteException("Signalement incohérent id = " + idloc);
+				}
+				signalements.add(new Signalement(loc, resultats.getString("signalement")));
+
 			}
-			
+
 			al.setSignalements(signalements);
 
 			conn.close();
 			System.out.println("Signalement init done");
-
 
 			// traitement d'exception
 		} catch (SQLException e) {

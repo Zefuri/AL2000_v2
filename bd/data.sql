@@ -9,10 +9,10 @@ drop table DVDs;
 
 create table Abonne (
 	idC number(3),
-	email varchar2(50),
-	numCB varchar2(20),
+	email varchar(50),
+	numCB varchar(20),
 	mdp varchar2(20),
-        credit number(3),
+    credit number(3),
 	constraint Abonne_C primary key (idC)
 );
 
@@ -44,9 +44,10 @@ create table DVDs (
 
 
 create table Locations (
-        idLocation number(10),
-        idDvd number(3),
+    idLocation number(10),
+    idDvd number(3),
 	idClient number(3),
+	idAbonne number(3),
 	dateLocation date,
 	constraint Locations_C primary key (idLocation),
 	constraint Locations_C1 foreign key (idDvd) references DVDs (idD),

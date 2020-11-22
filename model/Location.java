@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Location {
 	@Override
@@ -11,13 +11,13 @@ public class Location {
 	private int id;
 	private Client client;
 	private DVD dvd;
-	private Date date;
+	private java.sql.Date date;
 	
 	public Location(int id, Client client, DVD dvd) {
 		this.id = id;
 		this.client = client;
 		this.dvd = dvd;
-		this.date = new Date();
+		this.date = new java.sql.Date(new java.util.Date().getTime());
 	}
 	
 	public Location(int id, Client client, DVD dvd, Date date) {
@@ -50,6 +50,6 @@ public class Location {
 	}
 	
 	boolean isLate() {
-		return (new Date()).getTime() > (this.date.getTime() + (24*60*60*1000));
+		return (new java.util.Date()).getTime() > (this.date.getTime() + (24*60*60*1000));
 	}
 }

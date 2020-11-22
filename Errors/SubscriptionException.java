@@ -1,4 +1,4 @@
-package model;
+package Errors;
 
 public class SubscriptionException extends Exception {
 	public SubscriptionException() {
