@@ -195,10 +195,12 @@ public class AddBd {
 	 * add a Location to the database and add it to the corresponding historique
 	 *@param loc the Location that should be added to the database
 	*/
-	public static void addLocation(Location loc) {
+	public static void addLocation(Location loc, AL2000 al) {
 		if(loc == null) {
 			return;
 		}
+		
+		al.getCurrentLocation().add(loc);
 		Client cli = loc.getClient();
 		int idc = cli.getIdc();
 		int ida = 000;
@@ -211,7 +213,6 @@ public class AddBd {
 			ResultSet resultats = null;
 
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
-			conn.setAutoCommit(false);
 
 			PreparedStatement addloc = conn.prepareStatement("INSERT INTO LOCATIONS Values (?, ?,?,?,?)");
 			
@@ -228,7 +229,7 @@ public class AddBd {
 			conn.close();
 
 		} catch (SQLException e) {
-
+			al.getCurrentLocation().remove(loc);
 			System.err.println("could not add the Location please try again" + e);
 
 		}
@@ -253,7 +254,7 @@ public class AddBd {
 
 
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
-			conn.setAutoCommit(false);
+
 
 			PreparedStatement addHisto = conn.prepareStatement("INSERT INTO Historique Values (?,?,?,?,SYSDATE)");
 			
@@ -272,6 +273,10 @@ public class AddBd {
 			System.err.println("could not add the historique please try again" + e);
 
 		}
+	}
+	
+	public static void addLoc(Location loc, AL2000 al) {
+		
 	}
 
 }

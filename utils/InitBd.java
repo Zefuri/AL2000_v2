@@ -47,6 +47,7 @@ public final class InitBd {
 		initAbonne(al);
 		initClient(al);
 		initSignalements(al);
+		initLocation(al);
 		initTech(al);
 		System.out.println("Init al2000 done");
 
@@ -71,9 +72,10 @@ public final class InitBd {
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
 			for (String[] str : listqueries) {
 				for (String query : str) {
+					System.out.println(query + "à faire");
 					PreparedStatement createbd = conn.prepareStatement(query);
 					createbd.executeUpdate();
-					System.out.println(query + "done");
+
 				}
 			}
 			conn.close();
@@ -160,7 +162,7 @@ public final class InitBd {
 
 				ArrayList<Location> histo = new ArrayList<Location>();
 
-				PreparedStatement getloc = conn.prepareStatement("Select * FROM LOCATIONS WHERE idAbonne = ?");
+				PreparedStatement getloc = conn.prepareStatement("Select * FROM Historique WHERE idAbonne = ?");
 
 				getloc.setInt(1, resultats.getInt("idc"));
 
@@ -326,6 +328,57 @@ public final class InitBd {
 			System.out.println(e.getErrorCode());
 
 		}
+	}
+
+	private static void initLocation(AL2000 al) {
+		try {
+			System.out.println("Begining Location init");
+			ResultSet resultats = null;
+
+			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
+
+			PreparedStatement affichegard = conn.prepareStatement("SELECT * FROM Locations");
+
+			resultats = affichegard.executeQuery();
+			while (resultats.next()) {
+				DVD locdvd = null;
+				Client locCli = null;
+				for (DVD dvd : al.getDvds()) {
+					if (dvd.getId() == resultats.getInt("idDvd")) {
+						locdvd = dvd;
+					}
+				}
+				if (resultats.getInt("idAbonne") == 0) {
+					for (Client cli : al.getClients()) {
+						if (cli.getIdc() == resultats.getInt("idClient")) {
+							locCli = cli;
+						}
+					}
+				}else {
+					for(Abonne abo : al.getAbonnes()) {
+						if (abo.getIdc() == resultats.getInt("idAbonne")) {
+							locCli = abo;
+						}
+					}
+				}
+				al.getCurrentLocation().add(new Location(resultats.getInt("idLocation"), locCli, locdvd, resultats.getDate("dateLocation")));
+
+			}
+
+			conn.close();
+			System.out.println("Location init done");
+
+		} catch (SQLException e) {
+			System.err.println("failed");
+			System.out.println("Affichage de la pile d'erreur");
+			e.printStackTrace(System.err);
+			System.out.println("Affichage du message d'erreur");
+			System.out.println(e.getMessage());
+			System.out.println("Affichage du code d'erreur");
+			System.out.println(e.getErrorCode());
+
+		}
+
 	}
 
 }

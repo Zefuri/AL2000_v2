@@ -15,7 +15,8 @@ public class AL2000 {
 	private HashMap<Integer, Technicien> techniciens;
 	private ArrayList<DVD> dvds;
 	private ArrayList<Signalement> signalements;
-	
+	private ArrayList<Location> currentLocation;
+ 	
 	public AL2000() {
 		this.mode = Mode.UTILISATEUR;
 		this.clients = new ArrayList<>();
@@ -23,8 +24,17 @@ public class AL2000 {
 		this.dvds = new ArrayList<>();
 		this.Abonnes = new ArrayList<>();
 		this.signalements = new ArrayList<>();
+		this.currentLocation = new ArrayList<>();
 	}
 	
+	public ArrayList<Location> getCurrentLocation() {
+		return currentLocation;
+	}
+
+	public void setCurrentLocation(ArrayList<Location> currentLocation) {
+		this.currentLocation = currentLocation;
+	}
+
 	public ArrayList<Abonne> getAbonnes() {
 		return Abonnes;
 	}

@@ -1,11 +1,22 @@
 drop table Signalement;
+drop table historique;
 drop table Locations;
-drop table Historique;
-drop table Client;
 drop table Techniciens;
-drop table Abonne;
 drop table DVDs;
+drop table Abonne;
+drop table Client;
 
+create table DVDs (
+    idD number(3),
+	title varchar2(100),
+	genre varchar2(50),
+	releaseYear number(4),
+	producer varchar2(50),
+    actors varchar2(500),
+    summary varchar2(500),
+    urlImage varchar2(50),
+	constraint DVDs_C primary key (idD)
+);
 
 create table Abonne (
 	idC number(3),
@@ -30,17 +41,7 @@ create table Techniciens (
 	constraint Techniciens_C primary key (idT)
 );
 
-create table DVDs (
-        idD number(3),
-	title varchar2(100),
-	genre varchar2(50),
-	releaseYear number(4),
-	producer varchar2(50),
-        actors varchar2(500),
-        summary varchar2(500),
-        urlImage varchar2(50),
-	constraint DVDs_C primary key (idD)
-);
+
 
 
 create table Locations (
@@ -51,18 +52,19 @@ create table Locations (
 	dateLocation date,
 	constraint Locations_C primary key (idLocation),
 	constraint Locations_C1 foreign key (idDvd) references DVDs (idD),
-        constraint Locations_C2 foreign key (idClient) references Abonne (idC)
+    constraint Locations_C2 foreign key (idAbonne) references Abonne (idC),
+    constraint Locations_C3 foreign key (idClient) references Client (idC)
 );
 
 create table Historique (
-        idLocation number(10),
-        idDvd number(3),
-	idClient number(3),
+    idLocation number(10),
+    idDvd number(3),
+	idAbonne number(3),
 	dateLocation date,
 	dateRetour date,
 	constraint Historique_C primary key (idLocation),
 	constraint Historique_C1 foreign key (idDvd) references DVDs (idD),
-        constraint Historique_C2 foreign key (idClient) references Abonne (idC)
+    constraint Historique_C2 foreign key (idAbonne) references Abonne (idC)
 );
 
 create table Signalement (
