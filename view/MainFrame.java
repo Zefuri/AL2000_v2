@@ -110,6 +110,7 @@ public class MainFrame extends JFrame {
 							if(al2000.getAbonnes().get(id).verifierMdp(pwd)) {
 								SubscriberFrame subFrame = new SubscriberFrame(al2000, al2000.getAbonnes().get(id));
 								connectionFrame.dispose();
+								// TODO implements launch() on SubscriberFrame
 							} else {
 								System.err.println("Mot de passe incorrect : réessayez !");
 							}

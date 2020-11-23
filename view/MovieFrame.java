@@ -1,12 +1,16 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,16 +22,20 @@ import model.DVD;
 public class MovieFrame extends JFrame {
 	private MainFrame parentFrame;
 	private DVD dvd;
+	private MovieFrame me;
 	
 	public MovieFrame(MainFrame parentFrame, DVD dvd) {
 		super("AL2000 location du film \"" + dvd.getTitle() + "\"");
 		this.parentFrame = parentFrame;
 		this.dvd = dvd;
+		this.me = this;
 	}
 	
 	public void launch() {
 		this.setPreferredSize(new Dimension(800, 600));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		JPanel mainPanel = new JPanel(new BorderLayout());
 		
 		JPanel toScrollPanel = new JPanel(new GridBagLayout());
 		
@@ -72,7 +80,33 @@ public class MovieFrame extends JFrame {
 		
 		toScrollPanel.add(summaryLabel, gbc);
 		
-		JScrollPane mainPanel = new JScrollPane(toScrollPanel);
+		JScrollPane centerPanel = new JScrollPane(toScrollPanel);
+		
+		JPanel southPanel = new JPanel(new GridLayout(1, 3));
+		
+		JButton returnButton = new JButton(new AbstractAction("Retour") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				parentFrame.setVisible(true);
+				me.dispose();
+			}
+		});
+		
+		JButton locationButton = new JButton(new AbstractAction("Louer !") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO implements LocationFrame
+			}
+		});
+		
+		southPanel.add(returnButton);
+		southPanel.add(new JPanel());
+		southPanel.add(locationButton);
+		
+		mainPanel.add(centerPanel, BorderLayout.CENTER);
+		mainPanel.add(southPanel, BorderLayout.SOUTH);
 		
 		this.add(mainPanel);
 		this.pack();
