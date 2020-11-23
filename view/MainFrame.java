@@ -75,7 +75,7 @@ public class MainFrame extends JFrame {
 				JPanel centerPanel = new JPanel();
 				
 				JPanel idPanel = new JPanel();
-				JLabel idLabel = new JLabel("ID Utilisateur : ");
+				JLabel idLabel = new JLabel("ID Abonné : ");
 				JTextField idField = new JTextField();
 				idField.setPreferredSize(new Dimension(150, 25));
 				
@@ -143,8 +143,73 @@ public class MainFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Fonction à venir");
-				// TODO implements (factoriser le code ?)
+				JFrame connectionFrame = new JFrame("Connexion Technicien");
+				connectionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				connectionFrame.setPreferredSize(new Dimension(300, 150));
+				
+				JPanel mainPanel = new JPanel(new BorderLayout());
+				
+				JPanel centerPanel = new JPanel();
+				
+				JPanel idPanel = new JPanel();
+				JLabel idLabel = new JLabel("ID Technicien : ");
+				JTextField idField = new JTextField();
+				idField.setPreferredSize(new Dimension(150, 25));
+				
+				idPanel.add(idLabel);
+				idPanel.add(idField);
+				
+				JPanel pwdPanel = new JPanel();
+				JLabel pwdLabel = new JLabel("Mot de passe : ");
+				JPasswordField pwdField = new JPasswordField();
+				pwdField.setPreferredSize(new Dimension(150, 25));
+				
+				pwdPanel.add(pwdLabel);
+				pwdPanel.add(pwdField);
+				
+				centerPanel.add(idPanel);
+				centerPanel.add(pwdPanel);
+				
+				JPanel southPanel = new JPanel();
+				
+				JButton validate = new JButton(new AbstractAction("Valider") {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						int id = Integer.parseInt(idField.getText());
+						String pwd = pwdField.getSelectedText();
+						
+						if(al2000.getTechniciens().containsKey(id)) {
+							if(al2000.getTechniciens().get(id).connexion(pwd)) {
+								// TODO implements new SubscriberFrame
+								connectionFrame.dispose();
+							} else {
+								System.err.println("Mot de passe incorrect : réessayez !");
+							}
+						} else {
+							System.err.println("Technicien inexistant.");
+							connectionFrame.dispose();
+						}
+					}
+				});
+				
+				JButton cancel = new JButton(new AbstractAction("Annuler") {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						connectionFrame.dispose();
+					}
+				});
+				
+				southPanel.add(validate);
+				southPanel.add(cancel);
+
+				mainPanel.add(centerPanel, BorderLayout.CENTER);
+				mainPanel.add(southPanel, BorderLayout.SOUTH);
+				
+				connectionFrame.add(mainPanel);
+				connectionFrame.pack();
+				connectionFrame.setVisible(true);
 			}
 		};
 	}

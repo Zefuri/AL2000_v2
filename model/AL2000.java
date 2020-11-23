@@ -11,7 +11,7 @@ public class AL2000 {
 
 	private Mode mode;
 	private ArrayList<Client> clients;
-	private ArrayList<Abonne> Abonnes;
+	private ArrayList<Abonne> abonnes;
 	private HashMap<Integer, Technicien> techniciens;
 	private ArrayList<DVD> dvds;
 	private ArrayList<Signalement> signalements;
@@ -22,7 +22,7 @@ public class AL2000 {
 		this.clients = new ArrayList<>();
 		this.techniciens = new HashMap<>();
 		this.dvds = new ArrayList<>();
-		this.Abonnes = new ArrayList<>();
+		this.abonnes = new ArrayList<>();
 		this.signalements = new ArrayList<>();
 		this.currentLocation = new ArrayList<>();
 	}
@@ -36,11 +36,11 @@ public class AL2000 {
 	}
 
 	public ArrayList<Abonne> getAbonnes() {
-		return Abonnes;
+		return abonnes;
 	}
 
 	public void setAbonnes(ArrayList<Abonne> abonnes) {
-		Abonnes = abonnes;
+		this.abonnes = abonnes;
 	}
 	
 	public Mode getMode() {
@@ -85,7 +85,7 @@ public class AL2000 {
 	
 	@Override
 	public String toString() {
-		return "AL2000 [mode=" + mode + ", clients=" + clients + "\n" + ", Abonnes=" + Abonnes + "\n" + ", techniciens=" + (techniciens==null)+ "\n"
+		return "AL2000 [mode=" + mode + ", clients=" + clients + "\n" + ", Abonnes=" + abonnes + "\n" + ", techniciens=" + (techniciens==null)+ "\n"
 				+ ", dvds=" + (dvds == null)+ "\n" + ", signalements=" + (signalements== null)+ "\n" + "]";
 	}
 	
