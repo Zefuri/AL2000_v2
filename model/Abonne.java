@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-import Errors.SubscriptionException;
+import errors.SubscriptionException;
 
 public class Abonne extends Client {
 	protected int credit;

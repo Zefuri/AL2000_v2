@@ -13,8 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Errors.BdIncoherenteException;
-import Errors.SubscriptionException;
+import errors.BdIncoherenteException;
+import errors.SubscriptionException;
 import model.AL2000;
 import model.Abonne;
 import model.Client;

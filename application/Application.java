@@ -2,7 +2,7 @@ package application;
 
 import java.util.ArrayList;
 
-import Errors.BdIncoherenteException;
+import errors.BdIncoherenteException;
 import model.AL2000;
 import model.DVD;
 import model.Genre;

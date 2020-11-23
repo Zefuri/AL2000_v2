@@ -7,8 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import Errors.AL2000InternalError;
-import Errors.WrongModeException;
+import errors.AL2000InternalError;
+import errors.WrongModeException;
 import model.AL2000;
 import model.Abonne;
 import model.Client;

@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import Errors.WrongPasswordException;
+import errors.WrongPasswordException;
 
 public class AL2000 {
 
