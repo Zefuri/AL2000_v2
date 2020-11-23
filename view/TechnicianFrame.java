@@ -6,7 +6,7 @@ public class TechnicianFrame extends MainFrame {
 
 	public TechnicianFrame(AL2000 al2000) {
 		super(al2000);
-		// TODO Auto-generated constructor stub
+		// TODO implements all
 	}
 
 }
