@@ -43,7 +43,7 @@ public class MainFrame extends JFrame {
 		for(int i = 0; i < this.al2000.getDvds().size(); i++) {
 			DVD curDVD = this.al2000.getDvds().get(i);
 			
-			MoviePanel curMoviePanel = new MoviePanel(curDVD.getUrlImage(), curDVD);
+			MoviePanel curMoviePanel = new MoviePanel(curDVD);
 			curMoviePanel.addMouseListener(new MovieListener(this, curDVD));
 			
 			scrollableMoviePane.add(curMoviePanel);

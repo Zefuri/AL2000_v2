@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -10,10 +12,10 @@ public class MoviePanel extends JPanel {
 	private ImagePanel dustJacket;
 	private DVD dvd;
 	
-	public MoviePanel(String dustJacketPath, DVD dvd) {
+	public MoviePanel(DVD dvd) {
 		super();
 		this.dvd = dvd;
-		this.dustJacket = new ImagePanel("/resources/" + dustJacketPath);
+		this.dustJacket = new ImagePanel(new Dimension(300, 400), dvd.getUrlImage());
 		
 		this.setLayout(new BorderLayout());
 		
