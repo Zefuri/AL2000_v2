@@ -22,6 +22,7 @@ import model.Signalement;
  * 
  *this class put at disposal static functions to add object both to the data base and to the al2000
  *using any of these methods with an uninitialized al2000 will result in uncertain behaviors
+ *Adding object with null attributes will probably not work
 */
 public class AddBd {
 
@@ -245,10 +246,15 @@ public class AddBd {
 		if(loc == null) {
 			return;
 		}
+		
 		Abonne abo = (Abonne) loc.getClient();
+		
+		if(!abo.estAbonne()) {
+			return;
+		}
+		
 		abo.getHistorique().add(loc);
 		try {
-			ResultSet resultats = null;
 			
 
 
@@ -273,10 +279,6 @@ public class AddBd {
 			System.err.println("could not add the historique please try again" + e);
 
 		}
-	}
-	
-	public static void addLoc(Location loc, AL2000 al) {
-		
 	}
 
 }

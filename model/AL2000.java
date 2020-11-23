@@ -1,10 +1,16 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import errors.BdIncoherenteException;
 import errors.WrongPasswordException;
+import utils.AddBd;
+import utils.DelBd;
+import utils.InitBd;
 
 public class AL2000 {
 
@@ -41,16 +47,39 @@ public class AL2000 {
 		}
 		return null;
 	}
-	
-	public void montantLoc(Location loc) {
+	/**
+	 * give us the amount of money the customer owe us, being 4/day for Abonne and 5/day otherwise
+	 * every day began is a day which must be paid
+	 * @param loc the location
+	 * @return the amount of money the customer owe us
+	 */
+	public int montantLoc(Location loc) {
 		Date now = new Date();
 		Date old = loc.getDate();
+		int i = 1;
+		int prix = 5;
+		if(loc.getClient().estAbonne()) {
+			prix = 4;
+		}
+		Date dt = new Date();
+		Calendar c = Calendar.getInstance(); 
+		while(now.compareTo(old) < 0) {
+			i++;
+			c.setTime(old); 
+			c.add(Calendar.DATE, 1);
+			old = c.getTime();
+		}
+		return i * prix;
 	}
 	/**
-	 * 
-	 * @param loc
+	 * end the location and add it to the corresponding Historique if needed
+	 * @param loc the location being ended
 	 */
 	public void rendreLocation(Location loc) {
+		DelBd.delLocation(loc, this);
+		if(loc.getClient().estAbonne()) {
+			AddBd.addHisto(loc);
+		}
 		return;
 	}
 	
