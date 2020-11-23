@@ -8,16 +8,16 @@ import model.DVD;
 
 public class MoviePanel extends JPanel {
 	private ImagePanel dustJacket;
-	private String movieTitle;
+	private DVD dvd;
 	
-	public MoviePanel(String dustJacketPath, String movieTitle) {
+	public MoviePanel(String dustJacketPath, DVD dvd) {
 		super();
-		this.movieTitle = movieTitle;
+		this.dvd = dvd;
 		this.dustJacket = new ImagePanel("/resources/" + dustJacketPath);
 		
 		this.setLayout(new BorderLayout());
 		
 		this.add(dustJacket, BorderLayout.CENTER);
-		this.add(new JLabel(this.movieTitle), BorderLayout.SOUTH);
+		this.add(new JLabel(this.dvd.getTitle()), BorderLayout.SOUTH);
 	}
 }

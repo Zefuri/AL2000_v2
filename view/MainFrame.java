@@ -16,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
+import controller.MovieListener;
 import model.AL2000;
 import model.Abonne;
 import model.DVD;
@@ -41,7 +42,10 @@ public class MainFrame extends JFrame {
 		
 		for(int i = 0; i < this.al2000.getDvds().size(); i++) {
 			DVD curDVD = this.al2000.getDvds().get(i);
-			MoviePanel curMoviePanel = new MoviePanel(curDVD.getUrlImage(), curDVD.getTitle());
+			
+			MoviePanel curMoviePanel = new MoviePanel(curDVD.getUrlImage(), curDVD);
+			curMoviePanel.addMouseListener(new MovieListener(this, curDVD));
+			
 			scrollableMoviePane.add(curMoviePanel);
 		}
 		JScrollPane centerPanel = new JScrollPane(scrollableMoviePane);
@@ -102,9 +106,9 @@ public class MainFrame extends JFrame {
 						int id = Integer.parseInt(idField.getText());
 						String pwd = pwdField.getSelectedText();
 						
-						if(al2000.getClients().size() > id && al2000.getClients().get(id).estAbonne()) {
-							if(((Abonne) al2000.getClients().get(id)).verifierMdp(pwd)) {
-								// TODO implements new SubscriberFrame
+						if(al2000.getAbonnes().size() > id) {
+							if(al2000.getAbonnes().get(id).verifierMdp(pwd)) {
+								SubscriberFrame subFrame = new SubscriberFrame(al2000, al2000.getAbonnes().get(id));
 								connectionFrame.dispose();
 							} else {
 								System.err.println("Mot de passe incorrect : réessayez !");
@@ -212,5 +216,11 @@ public class MainFrame extends JFrame {
 				connectionFrame.setVisible(true);
 			}
 		};
+	}
+
+	public void switchToMovieFrame(DVD dvd) {
+		MovieFrame movieFrame = new MovieFrame(this, dvd);
+		movieFrame.launch();
+		this.setVisible(false);
 	}
 }
