@@ -19,9 +19,8 @@ public class DVD {
 	private String summary;
 	private boolean dispoLoc;
 	private String urlImage;
-
-	public DVD(int id, String title, Genre genre, int releaseDate, String producer, ArrayList<String> actors,
-			String summary, String urlImage) {
+	
+	public DVD(int id, String title, Genre genre, int releaseDate, String producer, ArrayList<String> actors, String summary, String urlImage) {
 		this.id = id;
 		this.title = title;
 		this.genre = genre;
@@ -48,7 +47,7 @@ public class DVD {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
+	
 	public Genre getGenre() {
 		return genre;
 	}
@@ -88,7 +87,7 @@ public class DVD {
 	public void setSummary(String summary) {
 		this.summary = summary;
 	}
-
+	
 	public String getUrlImage() {
 		return urlImage;
 	}
@@ -103,22 +102,5 @@ public class DVD {
 
 	public void changeDispoLoc() {
 		this.dispoLoc = !dispoLoc;
-	}
-
-	public String getActorsAsString() {
-		String res = "";
-		
-		if (this.actors.size() != 0) {
-			res = this.actors.get(0);
-
-			int i;
-			for (i = 1; i < this.actors.size() - 1; i++) {
-				res += ", " + this.actors.get(i);
-			}
-
-			res += "et " + this.actors.get(i);
-		}
-
-		return res;
 	}
 }

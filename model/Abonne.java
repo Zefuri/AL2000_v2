@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 import errors.SubscriptionException;
+import utils.UpdateBd;
 
 public class Abonne extends Client {
 	protected int credit;
@@ -47,11 +48,24 @@ public class Abonne extends Client {
 		this.credit += 10;
 	}
 	
-	public void rechargerCredit(int montant) throws SubscriptionException{
-		if(montant >= 10) {
-			this.credit += montant;
+	public void setCredit(int cred) {
+		this.credit = cred;
+	}
+	/**
+	 * 
+	 * @param montant the amount of credit added or subtracted
+	 * @throws SubscriptionException if the montant is less than 10 but is positive it is too low
+	 */
+	public void ChangeCredit(int montant) throws SubscriptionException{
+		if(montant >= 10 && montant > 0 && montant < this.credit) {
+			UpdateBd.updateCredit(this, montant);
 		} else {
-			throw new SubscriptionException("Le montant de recharge minimum est de 10€ !");
+			if(montant > 0) {
+				throw new SubscriptionException("Le montant de recharge minimum est de 10€ !");
+			}else {
+				throw new SubscriptionException("La maison ne fait pas credit !");
+			}
+			
 		}
 	}
 	

@@ -1,9 +1,16 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
+import errors.BdIncoherenteException;
 import errors.WrongPasswordException;
+import utils.AddBd;
+import utils.DelBd;
+import utils.InitBd;
 
 public class AL2000 {
 
@@ -25,6 +32,55 @@ public class AL2000 {
 		this.abonnes = new ArrayList<>();
 		this.signalements = new ArrayList<>();
 		this.currentLocation = new ArrayList<>();
+	}
+	/**
+	 * 
+	 * @param list the list of Client or the list of Abonne
+	 * @param idc the id of the client we want to find
+	 * @return the client with the id idc or null if the client is not in the list
+	 */
+	public Client getClientId(ArrayList<Client> list, int idc) {
+		for(Client cli : list) {
+			if(cli.getIdc() == idc) {
+				return cli;
+			}
+		}
+		return null;
+	}
+	/**
+	 * give us the amount of money the customer owe us, being 4/day for Abonne and 5/day otherwise
+	 * every day began is a day which must be paid
+	 * @param loc the location
+	 * @return the amount of money the customer owe us
+	 */
+	public int montantLoc(Location loc) {
+		Date now = new Date();
+		Date old = loc.getDate();
+		int i = 1;
+		int prix = 5;
+		if(loc.getClient().estAbonne()) {
+			prix = 4;
+		}
+		Date dt = new Date();
+		Calendar c = Calendar.getInstance(); 
+		while(now.compareTo(old) < 0) {
+			i++;
+			c.setTime(old); 
+			c.add(Calendar.DATE, 1);
+			old = c.getTime();
+		}
+		return i * prix;
+	}
+	/**
+	 * end the location and add it to the corresponding Historique if needed
+	 * @param loc the location being ended
+	 */
+	public void rendreLocation(Location loc) {
+		DelBd.delLocation(loc, this);
+		if(loc.getClient().estAbonne()) {
+			AddBd.addHisto(loc);
+		}
+		return;
 	}
 	
 	public ArrayList<Location> getCurrentLocation() {
