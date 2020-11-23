@@ -1,8 +1,8 @@
-package Tests;
+package tests;
 
-import Errors.BdIncoherenteException;
-import Errors.SubscriptionException;
-import Errors.WrongModeException;
+import errors.BdIncoherenteException;
+import errors.SubscriptionException;
+import errors.WrongModeException;
 import model.AL2000;
 import model.Abonne;
 import model.Client;

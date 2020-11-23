@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import errors.WrongPasswordException;
@@ -25,6 +26,32 @@ public class AL2000 {
 		this.abonnes = new ArrayList<>();
 		this.signalements = new ArrayList<>();
 		this.currentLocation = new ArrayList<>();
+	}
+	/**
+	 * 
+	 * @param list the list of Client or the list of Abonne
+	 * @param idc the id of the client we want to find
+	 * @return the client with the id idc or null if the client is not in the list
+	 */
+	public Client getClientId(ArrayList<Client> list, int idc) {
+		for(Client cli : list) {
+			if(cli.getIdc() == idc) {
+				return cli;
+			}
+		}
+		return null;
+	}
+	
+	public void montantLoc(Location loc) {
+		Date now = new Date();
+		Date old = loc.getDate();
+	}
+	/**
+	 * 
+	 * @param loc
+	 */
+	public void rendreLocation(Location loc) {
+		return;
 	}
 	
 	public ArrayList<Location> getCurrentLocation() {
