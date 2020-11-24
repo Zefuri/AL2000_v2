@@ -34,15 +34,25 @@ public class AL2000 {
 		this.currentLocation = new ArrayList<>();
 	}
 	/**
-	 * 
-	 * @param list the list of Client or the list of Abonne
 	 * @param idc the id of the client we want to find
 	 * @return the client with the id idc or null if the client is not in the list
 	 */
-	public Client getClientId(ArrayList<Client> list, int idc) {
-		for(Client cli : list) {
+	public Client getClientId(int idc) {
+		for(Client cli : this.clients) {
 			if(cli.getIdc() == idc) {
 				return cli;
+			}
+		}
+		return null;
+	}
+	/**
+	 * @param ida the id of the client we want to find
+	 * @return the subscriber with the id ida or null if the subscriber is not in the list
+	 */
+	public Abonne getAbonneId(int ida) {
+		for(Abonne abo : this.abonnes) {
+			if(abo.getIdc() == ida) {
+				return abo;
 			}
 		}
 		return null;

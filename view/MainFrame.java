@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -19,6 +20,7 @@ import javax.swing.JToolBar;
 import controller.MovieListener;
 import model.AL2000;
 import model.Abonne;
+import model.Client;
 import model.DVD;
 
 public class MainFrame extends JFrame {
@@ -106,7 +108,9 @@ public class MainFrame extends JFrame {
 						int id = Integer.parseInt(idField.getText());
 						String pwd = pwdField.getSelectedText();
 						
-						if(al2000.getAbonnes().size() > id) {
+						Abonne abo = (Abonne) al2000.getAbonneId(id);
+						
+						if(abo != null) {
 							if(al2000.getAbonnes().get(id).verifierMdp(pwd)) {
 								SubscriberFrame subFrame = new SubscriberFrame(al2000, al2000.getAbonnes().get(id));
 								connectionFrame.dispose();
@@ -115,7 +119,7 @@ public class MainFrame extends JFrame {
 								System.err.println("Mot de passe incorrect : réessayez !");
 							}
 						} else {
-							System.err.println("Client introuvable ou non abonné au service !");
+							System.err.println("Abonné introuvable !");
 							connectionFrame.dispose();
 						}
 					}
@@ -186,7 +190,7 @@ public class MainFrame extends JFrame {
 						
 						if(al2000.getTechniciens().containsKey(id)) {
 							if(al2000.getTechniciens().get(id).connexion(pwd)) {
-								// TODO implements new SubscriberFrame
+								// TODO implements new TechnicianFrame
 								connectionFrame.dispose();
 							} else {
 								System.err.println("Mot de passe incorrect : réessayez !");
