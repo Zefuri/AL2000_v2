@@ -27,11 +27,11 @@ public class Application {
 		System.out.println(al2000);*/
 
 		ArrayList<DVD> dvds = new ArrayList<DVD>();
-		dvds.add(new DVD(0, "The Godfather", Genre.DRAME, 2000, "", new ArrayList<String>(), "", "godfather.jpg"));
+		/*dvds.add(new DVD(0, "The Godfather", Genre.DRAME, 2000, "", new ArrayList<String>(), "", "godfather.jpg"));
 		dvds.add(new DVD(1, "Joker", Genre.ACTION, 2000, "", new ArrayList<String>(), "", "joker.jpg"));
 		dvds.add(new DVD(2, "Pulp Fiction", Genre.ACTION, 2000, "", new ArrayList<String>(), "", "pulpfiction.jpg"));
 		dvds.add(new DVD(3, "The Dictator", Genre.COMEDIE, 2000, "", new ArrayList<String>(), "", "thedictator.jpg"));
-		dvds.add(new DVD(4, "Titanic", Genre.DRAME, 2000, "", new ArrayList<String>(), "", "titanic.jpg"));
+		dvds.add(new DVD(4, "Titanic", Genre.DRAME, 2000, "", new ArrayList<String>(), "", "titanic.jpg"));*/
 
 		al2000.setDvds(dvds);
 
