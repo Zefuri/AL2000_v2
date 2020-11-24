@@ -93,13 +93,13 @@ public class MainFrame extends JFrame {
 	protected JToolBar createToolBar() {
 		JToolBar res = new JToolBar();
 		
-		res.add(userConnectionButtonAction());
-		res.add(switchToTechModeButtonAction());
+		res.add(userConnectionButtonAction(this));
+		res.add(switchToTechModeButtonAction(this));
 		
 		return res;
 	}
 	
-	private AbstractAction userConnectionButtonAction() {
+	private AbstractAction userConnectionButtonAction(MainFrame me) {
 		
 		return new AbstractAction("Connexion") {
 			
@@ -139,15 +139,16 @@ public class MainFrame extends JFrame {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						int id = Integer.parseInt(idField.getText());
-						String pwd = pwdField.getSelectedText();
+						String pwd = String.valueOf(pwdField.getPassword());
 						
 						Abonne abo = (Abonne) al2000.getAbonneId(id);
 						
 						if(abo != null) {
-							if(al2000.getAbonnes().get(id).verifierMdp(pwd)) {
-								SubscriberFrame subFrame = new SubscriberFrame(al2000, al2000.getAbonnes().get(id));
+							if(abo.verifierMdp(pwd)) {
+								SubscriberFrame subFrame = new SubscriberFrame(al2000, abo);
+								subFrame.launch();
 								connectionFrame.dispose();
-								// TODO implements launch() on SubscriberFrame
+								me.dispose();
 							} else {
 								System.err.println("Mot de passe incorrect : réessayez !");
 							}
@@ -179,7 +180,7 @@ public class MainFrame extends JFrame {
 		};
 	}
 
-	private AbstractAction switchToTechModeButtonAction() {
+	private AbstractAction switchToTechModeButtonAction(MainFrame me) {
 
 		return new AbstractAction("Maintenance") {
 			
@@ -223,8 +224,10 @@ public class MainFrame extends JFrame {
 						
 						if(al2000.getTechniciens().containsKey(id)) {
 							if(al2000.getTechniciens().get(id).connexion(pwd)) {
-								// TODO implements new TechnicianFrame
+								TechnicianFrame techFrame = new TechnicianFrame(al2000);
+								techFrame.launch();
 								connectionFrame.dispose();
+								me.dispose();
 							} else {
 								System.err.println("Mot de passe incorrect : réessayez !");
 							}
