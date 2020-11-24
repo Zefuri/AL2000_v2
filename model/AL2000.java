@@ -7,16 +7,17 @@ import java.util.Date;
 import java.util.HashMap;
 
 import errors.BdIncoherenteException;
+import errors.SubscriptionException;
+import errors.TechnicianException;
 import errors.WrongPasswordException;
 import utils.AddBd;
 import utils.DelBd;
 import utils.InitBd;
 
 public class AL2000 {
-
-
-
+	
 	private Mode mode;
+	private boolean connected;
 	private ArrayList<Client> clients;
 	private ArrayList<Abonne> abonnes;
 	private HashMap<Integer, Technicien> techniciens;
@@ -46,16 +47,31 @@ public class AL2000 {
 		return null;
 	}
 	/**
-	 * @param ida the id of the client we want to find
-	 * @return the subscriber with the id ida or null if the subscriber is not in the list
+	 * @param ida the id of the subscriber we want to find
+	 * @param pwd the password of the subscriber
+	 * @return the subscriber with the id ida
 	 */
-	public Abonne getAbonneId(int ida) {
-		for(Abonne abo : this.abonnes) {
-			if(abo.getIdc() == ida) {
-				return abo;
-			}
+	public Abonne connectAbonne(int ida, String pwd) throws SubscriptionException, WrongPasswordException {
+		Abonne res = null;
+		
+		int i = 0;
+		while(i < this.abonnes.size() && ida != this.abonnes.get(i).getIdc()) {
+			i++;
 		}
-		return null;
+		
+		if(i < this.abonnes.size()) {
+			res = this.abonnes.get(i);
+			
+			if (res.verifierMdp(pwd)) {
+				this.connected = true;
+			} else {
+				throw new WrongPasswordException("Mot de passe erronné : réessayez !");
+			}
+		} else {
+			throw new SubscriptionException("Abonné introuvable !");
+		}
+		
+		return res;
 	}
 	/**
 	 * give us the amount of money the customer owe us, being 4/day for Abonne and 5/day otherwise
@@ -165,21 +181,29 @@ public class AL2000 {
 		
 	}
 
-	public void modeMaintenance(int idTech, String mdp) throws WrongPasswordException {
+	public Technicien modeMaintenance(int idTech, String mdp) throws TechnicianException, WrongPasswordException {
+		Technicien res = null;
+		
 		switch(mode) {
 			case MAINTENANCE:
 				this.mode = Mode.UTILISATEUR;
+				this.connected = false;
 				break;
 			case UTILISATEUR:
 				if(techniciens.containsKey(idTech)) {
 					if(techniciens.get(idTech).connexion(mdp)) {
+						res= techniciens.get(idTech);
 						this.mode = Mode.MAINTENANCE;
+						this.connected = true;
 					} else {
-						throw new WrongPasswordException("Mauvais mot de passe, connexion impossible.");
+						throw new WrongPasswordException("Mot de passe erroné : réessayez !");
 					}
+				} else {
+					throw new TechnicianException("Technicien introuvable §");
 				}
 		}
 		
+		return res;
 	}
 	
 	

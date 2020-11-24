@@ -18,10 +18,14 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 import controller.MovieListener;
+import errors.SubscriptionException;
+import errors.TechnicianException;
+import errors.WrongPasswordException;
 import model.AL2000;
 import model.Abonne;
 import model.Client;
 import model.DVD;
+import model.Technicien;
 
 public class MainFrame extends JFrame {
 	protected AL2000 al2000;
@@ -141,20 +145,18 @@ public class MainFrame extends JFrame {
 						int id = Integer.parseInt(idField.getText());
 						String pwd = String.valueOf(pwdField.getPassword());
 						
-						Abonne abo = (Abonne) al2000.getAbonneId(id);
+						Abonne abo = null;
+						try {
+							abo = al2000.connectAbonne(id, pwd);
+						} catch (SubscriptionException | WrongPasswordException e1) {
+							e1.printStackTrace();
+						}
 						
 						if(abo != null) {
-							if(abo.verifierMdp(pwd)) {
-								SubscriberFrame subFrame = new SubscriberFrame(al2000, abo);
-								subFrame.launch();
-								connectionFrame.dispose();
-								me.dispose();
-							} else {
-								System.err.println("Mot de passe incorrect : réessayez !");
-							}
-						} else {
-							System.err.println("Abonné introuvable !");
+							SubscriberFrame subFrame = new SubscriberFrame(al2000, abo);
+							subFrame.launch();
 							connectionFrame.dispose();
+							me.dispose();
 						}
 					}
 				});
@@ -222,18 +224,18 @@ public class MainFrame extends JFrame {
 						int id = Integer.parseInt(idField.getText());
 						String pwd = pwdField.getSelectedText();
 						
-						if(al2000.getTechniciens().containsKey(id)) {
-							if(al2000.getTechniciens().get(id).connexion(pwd)) {
-								TechnicianFrame techFrame = new TechnicianFrame(al2000);
-								techFrame.launch();
-								connectionFrame.dispose();
-								me.dispose();
-							} else {
-								System.err.println("Mot de passe incorrect : réessayez !");
-							}
-						} else {
-							System.err.println("Technicien inexistant.");
+						Technicien tech = null;
+						try {
+							tech = al2000.modeMaintenance(id, pwd);
+						} catch (TechnicianException | WrongPasswordException e1) {
+							e1.printStackTrace();
+						}
+						
+						if(tech != null) {
+							TechnicianFrame techFrame = new TechnicianFrame(al2000);
+							techFrame.launch();
 							connectionFrame.dispose();
+							me.dispose();
 						}
 					}
 				});
