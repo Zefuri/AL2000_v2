@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class MainFrame extends JFrame {
 		this.al2000 = al2000;
 		this.welcomingMessage = "Bienvenue dans l'AL2000";
 	}
-
+	
 	public void launch() {
 		this.setPreferredSize(new Dimension(800, 600));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -81,10 +82,12 @@ public class MainFrame extends JFrame {
 		for(int i = 0; i < this.al2000.getDvds().size(); i++) {
 			DVD curDVD = this.al2000.getDvds().get(i);
 			
-			MoviePanel curMoviePanel = new MoviePanel(curDVD);
-			curMoviePanel.addMouseListener(new MovieListener(this, curDVD));
-			
-			res.add(curMoviePanel);
+			if (curDVD.isDispoLoc()) {
+				MoviePanel curMoviePanel = new MoviePanel(curDVD);
+				curMoviePanel.addMouseListener(new MovieListener(this, curDVD));
+				
+				res.add(curMoviePanel);
+			}
 		}
 		
 		return res;
@@ -262,8 +265,12 @@ public class MainFrame extends JFrame {
 	}
 
 	public void switchToMovieFrame(DVD dvd) {
-		MovieFrame movieFrame = new MovieFrame(this, dvd);
+		MovieFrame movieFrame = new MovieFrame(this, dvd, this.al2000);
 		movieFrame.launch();
 		this.setVisible(false);
+	}
+	
+	public Abonne getConnectedSubscriber() {
+		return null;
 	}
 }

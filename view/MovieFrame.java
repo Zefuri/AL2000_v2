@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -15,23 +16,31 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
+import model.AL2000;
+import model.Abonne;
+import model.Client;
 import model.DVD;
+import model.Mode;
+import utils.AddBd;
+import utils.UpdateBd;
 
 public class MovieFrame extends JFrame {
 	private MainFrame parentFrame;
 	private DVD dvd;
-	private MovieFrame me;
+	private AL2000 al2000;
 	
-	public MovieFrame(MainFrame parentFrame, DVD dvd) {
+	public MovieFrame(MainFrame parentFrame, DVD dvd, AL2000 al2000) {
 		super("AL2000 location du film \"" + dvd.getTitle() + "\"");
 		this.parentFrame = parentFrame;
 		this.dvd = dvd;
-		this.me = this;
+		this.al2000 = al2000;
 	}
-	
+
 	public void launch() {
 		this.setPreferredSize(new Dimension(800, 600));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -89,6 +98,8 @@ public class MovieFrame extends JFrame {
 		
 		JPanel southPanel = new JPanel(new GridLayout(1, 3));
 		
+		MovieFrame me = this;
+		
 		JButton returnButton = new JButton(new AbstractAction("Retour") {
 			
 			@Override
@@ -102,8 +113,101 @@ public class MovieFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Fonction à venir ...");
-				// TODO implements LocationFrame
+				JFrame locationFrame = new JFrame();
+				locationFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+				locationFrame.setPreferredSize(new Dimension(500, 150));
+				
+				JPanel mainPanel = new JPanel(new BorderLayout());
+				JPanel centerPanel = new JPanel();
+				JPanel southPanel = new JPanel();
+				
+				if(me.getAL2000().isConnected() && me.getAL2000().getMode() == Mode.UTILISATEUR) {
+					Abonne abo = ((SubscriberFrame) parentFrame).getConnectedSubscriber();
+					
+					if(abo.getCredit() > 5) {
+						UpdateBd.updateCredit(abo, -5);
+						// TODO UpdateBd.updateDVDDispoLoc
+						me.rentDVD();
+						
+						locationFrame.setTitle("Location réussie !");
+						centerPanel.add(new JLabel("Location réussie, vous avez été débité de 5€ sur votre solde!"));
+					} else {
+						locationFrame.setTitle("Echec de la location ...");
+						centerPanel.add(new JLabel("Il semblerait que votre solde ne sois pas suffisant ..."));
+						centerPanel.add(new JLabel("Mais vous pouvez toujours créditer votre compte !"));
+					}
+					
+					southPanel.add(new JButton(new AbstractAction("Ok !") {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							locationFrame.dispose();
+						}
+					}));
+				} else {
+					locationFrame.setPreferredSize(new Dimension(300, 150));
+					locationFrame.setTitle("Coordonnées");
+					
+					JPanel mailPanel = new JPanel();
+					JLabel mailLabel = new JLabel("Adresse mail : ");
+					JTextField mailField = new JTextField();
+					mailField.setPreferredSize(new Dimension(150, 25));
+					
+					mailPanel.add(mailLabel);
+					mailPanel.add(mailField);
+					
+					JPanel cardPanel = new JPanel();
+					JLabel cardLabel = new JLabel("Numéro de carte : ");
+					JPasswordField cardField = new JPasswordField();
+					cardField.setPreferredSize(new Dimension(150, 25));
+					
+					cardPanel.add(cardLabel);
+					cardPanel.add(cardField);
+					
+					centerPanel.add(mailPanel);
+					centerPanel.add(cardPanel);
+					
+					southPanel.add(new JButton(new AbstractAction("Suivant") {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							AddBd.addClient(me.getAL2000().createNewClient(mailField.getText(), String.valueOf(cardField.getPassword())), me.getAL2000());
+							locationFrame.dispose();
+							
+							JFrame doneFrame = new JFrame("Location réussie !");
+							doneFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+							doneFrame.setPreferredSize(new Dimension(500, 150));
+							
+							JPanel mainPanelDone = new JPanel(new BorderLayout());
+							
+							JPanel centerPanelDone = new JPanel();
+							centerPanelDone.add(new JLabel("Location réussie, vous allez être débité de 5€ sur votre carte!"));
+							
+							JPanel southPanelDone = new JPanel();
+							southPanelDone.add(new JButton(new AbstractAction("Ok !") {
+								
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									doneFrame.dispose();
+								}
+							}));
+							
+							mainPanelDone.add(centerPanelDone, BorderLayout.CENTER);
+							mainPanelDone.add(southPanelDone, BorderLayout.SOUTH);
+							
+							doneFrame.add(mainPanelDone);
+							doneFrame.pack();
+							doneFrame.setVisible(true);
+						}
+					}));
+				}
+				
+				mainPanel.add(centerPanel, BorderLayout.CENTER);
+				mainPanel.add(southPanel, BorderLayout.SOUTH);
+				
+				locationFrame.add(mainPanel);
+				locationFrame.pack();
+				locationFrame.setVisible(true);
 			}
 		});
 		
@@ -117,5 +221,13 @@ public class MovieFrame extends JFrame {
 		this.add(mainPanel);
 		this.pack();
 		this.setVisible(true);
+	}
+	
+	private AL2000 getAL2000() {
+		return al2000;
+	}
+	
+	private void rentDVD() {
+		this.dvd.changeDispoLoc();
 	}
 }

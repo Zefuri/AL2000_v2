@@ -58,9 +58,13 @@ public class SubscriberFrame extends MainFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				MainFrame mainFrame = new MainFrame(al2000);
-				mainFrame.launch();
 				me.dispose();
 			}
 		};
+	}
+	
+	@Override
+	public Abonne getConnectedSubscriber() {
+		return this.abonne;
 	}
 }

@@ -33,6 +33,7 @@ public class AL2000 {
 		this.abonnes = new ArrayList<>();
 		this.signalements = new ArrayList<>();
 		this.currentLocation = new ArrayList<>();
+		this.connected = false;
 	}
 	/**
 	 * @param idc the id of the client we want to find
@@ -132,6 +133,10 @@ public class AL2000 {
 	public void setMode(Mode mode) {
 		this.mode = mode;
 	}
+	
+	public boolean isConnected() {
+		return this.connected;
+	}
 
 	public ArrayList<Client> getClients() {
 		return clients;
@@ -206,5 +211,16 @@ public class AL2000 {
 		return res;
 	}
 	
+	public Client createNewClient(String mail, String numCB) {
+		int max = 0;
+		
+		for(Client c : this.clients) {
+			if(c.getIdc() > max) {
+				max = c.getIdc();
+			}
+		}
+		
+		return new Client(numCB, mail, max+1);
+	}
 	
 }
