@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 
 import model.DVD;
 
@@ -71,14 +72,18 @@ public class MovieFrame extends JFrame {
 		
 		toScrollPanel.add(labelPanel, gbc);
 		
-		JLabel summaryLabel = new JLabel(dvd.getSummary());
+		JTextPane summaryTextPane = new JTextPane();
+		summaryTextPane.setText(dvd.getSummary());
+		summaryTextPane.setEditable(false);
+		summaryTextPane.setPreferredSize(new Dimension(750, 150));
+		
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		gbc.gridwidth = 3;
 		gbc.gridheight = 1;
 		gbc.anchor = GridBagConstraints.CENTER;
 		
-		toScrollPanel.add(summaryLabel, gbc);
+		toScrollPanel.add(summaryTextPane, gbc);
 		
 		JScrollPane centerPanel = new JScrollPane(toScrollPanel);
 		
@@ -97,6 +102,7 @@ public class MovieFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Fonction à venir ...");
 				// TODO implements LocationFrame
 			}
 		});
