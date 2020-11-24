@@ -20,7 +20,7 @@ public class DVD {
 	private boolean dispoLoc;
 	private String urlImage;
 	
-	public DVD(int id, String title, Genre genre, int releaseDate, String producer, ArrayList<String> actors, String summary, String urlImage) {
+	public DVD(int id, String title, Genre genre, int releaseDate, String producer, ArrayList<String> actors, String summary, String urlImage, boolean dispo) {
 		this.id = id;
 		this.title = title;
 		this.genre = genre;
@@ -29,7 +29,7 @@ public class DVD {
 		this.actors = actors;
 		this.summary = summary;
 		this.urlImage = urlImage;
-		this.dispoLoc = false;
+		this.dispoLoc = dispo;
 	}
 
 	public int getId() {

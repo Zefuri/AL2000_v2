@@ -15,6 +15,7 @@ create table DVDs (
     actors varchar2(500),
     summary varchar2(500),
     urlImage varchar2(50),
+    dispoloc BOOLEAN,
 	constraint DVDs_C primary key (idD)
 );
 

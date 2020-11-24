@@ -11,6 +11,7 @@ import errors.WrongPasswordException;
 import utils.AddBd;
 import utils.DelBd;
 import utils.InitBd;
+import utils.UpdateBd;
 
 public class AL2000 {
 
@@ -77,6 +78,12 @@ public class AL2000 {
 	 */
 	public void rendreLocation(Location loc) {
 		DelBd.delLocation(loc, this);
+		for(DVD dvd : this.dvds) {
+			if(dvd.getId() == loc.getDvd().getId()) {
+				 UpdateBd.updateDVD(dvd, this);
+				 break;
+			}
+		}
 		if(loc.getClient().estAbonne()) {
 			AddBd.addHisto(loc);
 		}

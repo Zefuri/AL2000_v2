@@ -61,8 +61,10 @@ public class DelBd {
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
 
 			PreparedStatement remDvd = conn.prepareStatement("DELETE FROM DVDs WHERE idD = ?");
+			PreparedStatement remLoc = conn.prepareStatement("DELETE FROM Locations WHERE idDVD = ?");
 
 			remDvd.setInt(1, dvd.getId());
+			remLoc.setInt(1, dvd.getId());
 
 			remDvd.executeUpdate();
 
