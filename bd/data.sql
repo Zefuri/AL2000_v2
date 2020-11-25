@@ -71,6 +71,7 @@ create table Historique (
 create table Signalement (
         idLocation number(3),
         signalement varchar2(500),
+        montant number(5),
 	constraint Signalement_C foreign key (idLocation) references Historique (idLocation)
 );
 

@@ -8,10 +8,12 @@ public class Signalement {
 
 	private Location location;
 	private String motif;
+	private int montant;
 	
-	public Signalement(Location location, String motif) {
+	public Signalement(Location location, String motif, int montant) {
 		this.location = location;
 		this.motif = motif;
+		this.montant = montant;
 	}
 
 	public Location getLocation() {

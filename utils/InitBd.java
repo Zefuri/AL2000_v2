@@ -237,7 +237,7 @@ public final class InitBd {
 				if (loc == null) {
 					throw new BdIncoherenteException("Signalement incohérent id = " + idloc);
 				}
-				signalements.add(new Signalement(loc, resultats.getString("signalement")));
+				signalements.add(new Signalement(loc, resultats.getString("signalement"), resultats.getInt("montant")));
 
 			}
 
