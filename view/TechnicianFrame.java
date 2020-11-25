@@ -19,6 +19,7 @@ import errors.WrongPasswordException;
 import model.AL2000;
 import model.Abonne;
 import model.DVD;
+import model.Location;
 import model.Signalement;
 import utils.DelBd;
 import utils.UpdateBd;
@@ -45,6 +46,7 @@ public class TechnicianFrame extends MainFrame {
 		JPanel southP = new JPanel(new BorderLayout());
 		southP.add(buttonAdd(al2000), BorderLayout.WEST);
 		southP.add(buttonDel(al2000), BorderLayout.EAST);
+		southP.add(new JButton(disconnectButtonAction(al2000, this)), BorderLayout.SOUTH);
 
 		JPanel eastP = new JPanel(new BorderLayout());
 
@@ -65,6 +67,17 @@ public class TechnicianFrame extends MainFrame {
 			public void actionPerformed(ActionEvent e) {
 				label.setText("Selectionnez un signalement");
 				Signalement aDel = listeSign.getSelectedValue();
+				model.removeElement(aDel);
+				DelBd.delSign(aDel, al2000);
+			}
+		});
+		
+		JButton buttonremb = new JButton(new AbstractAction("rembourser un signalement") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				label.setText("selectionnez un signalement");
+				Signalement aDel = listeSign.getSelectedValue();
+				Location loc = aDel.getLocation();
 				model.removeElement(aDel);
 				DelBd.delSign(aDel, al2000);
 			}
@@ -157,5 +170,17 @@ public class TechnicianFrame extends MainFrame {
 		return panel;
 
 
+	}
+	
+	private AbstractAction disconnectButtonAction(AL2000 al2000, TechnicianFrame me) {
+		return new AbstractAction("Deconnexion") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainFrame mainFrame = new MainFrame(al2000);
+				mainFrame.launch();
+				me.dispose();
+			}
+		};
 	}
 }

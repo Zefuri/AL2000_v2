@@ -28,7 +28,7 @@ public class Testadd {
 			
 			Abonne Pepe = new Abonne("479845685", "Pepemancel38@gmail.com", 8, 500, "gpudeponey");
 			Location loc = new Location(012, Pepe, al.getDvds().get(2));
-			Signalement sign = new Signalement(loc, "ceci est un test en vrai le film était plutot pas mal");
+			Signalement sign = new Signalement(loc, "ceci est un test en vrai le film était plutot pas mal", 100);
 			Client cli = new Client("456481356", "gpasdabo@free.fr", 504);
 			
 			
