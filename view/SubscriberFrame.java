@@ -36,7 +36,7 @@ public class SubscriberFrame extends MainFrame {
 		JToolBar res = new JToolBar();
 		
 		res.add(profilButtonAction(this));
-		res.add(disconnectButtonAction(this.al2000, this));
+		res.add(disconnectButtonAction(this));
 		
 		return res;
 	}
@@ -53,7 +53,7 @@ public class SubscriberFrame extends MainFrame {
 		};
 	}
 	
-	private AbstractAction disconnectButtonAction(AL2000 al2000, SubscriberFrame me) {
+	private AbstractAction disconnectButtonAction(SubscriberFrame me) {
 		return new AbstractAction("Deconnexion") {
 			
 			@Override
@@ -63,5 +63,10 @@ public class SubscriberFrame extends MainFrame {
 				me.dispose();
 			}
 		};
+	}
+	
+	@Override
+	public Abonne getConnectedSubscriber() {
+		return this.abonne;
 	}
 }

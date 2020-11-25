@@ -52,7 +52,7 @@ public class TechnicianFrame extends MainFrame {
 
 		DefaultListModel<Signalement> model = new DefaultListModel<>();
 		JList<Signalement> listeSign = new JList<>(model);
-		JLabel label = new JLabel("selectionnez un signalement");
+		JLabel label = new JLabel("Selectionnez un signalement");
 
 		for (Signalement sign : this.al2000.getSignalements()) {
 			model.addElement(sign);
@@ -62,10 +62,10 @@ public class TechnicianFrame extends MainFrame {
 
 		eastP.add(label, BorderLayout.CENTER);
 
-		JButton buttonmoins = new JButton(new AbstractAction("effacer un signalement") {
+		JButton buttonmoins = new JButton(new AbstractAction("Effacer un signalement") {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				label.setText("selectionnez un signalement");
+				label.setText("Selectionnez un signalement");
 				Signalement aDel = listeSign.getSelectedValue();
 				model.removeElement(aDel);
 				DelBd.delSign(aDel, al2000);
@@ -96,12 +96,12 @@ public class TechnicianFrame extends MainFrame {
 	}
 
 	private JPanel buttonAdd(AL2000 al) {
-		JPanel Panel = new JPanel(new BorderLayout());
+		JPanel panel = new JPanel(new BorderLayout());
 		JButton validate = new JButton(new AbstractAction("Ajouter un dvd") {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFrame addDvd = new JFrame("remove dvd");
+				JFrame addDvd = new JFrame("Ajouter un dvd");
 				setDefaultCloseOperation(EXIT_ON_CLOSE);
 				addDvd.setSize(800, 600);
 				DefaultListModel<DVD> model = new DefaultListModel<>();
@@ -112,7 +112,7 @@ public class TechnicianFrame extends MainFrame {
 						model.addElement(dvd);
 					}
 				}
-				JButton add = new JButton(new AbstractAction("ajouter à l'al2000\"") {
+				JButton add = new JButton(new AbstractAction("Ajouter à l'al2000\"") {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						DVD toChange = listedvd.getSelectedValue();
@@ -128,18 +128,18 @@ public class TechnicianFrame extends MainFrame {
 				addDvd.setVisible(true);
 			}
 		});
-		Panel.add(validate);
-		return Panel;
+		panel.add(validate);
+		return panel;
 
 	}
 
 	private JPanel buttonDel(AL2000 al) {
-		JPanel Panel = new JPanel(new BorderLayout());
-		JButton validate = new JButton(new AbstractAction("retirer un dvd") {
+		JPanel panel = new JPanel(new BorderLayout());
+		JButton validate = new JButton(new AbstractAction("Retirer un dvd") {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFrame delDvd = new JFrame("remove dvd");
+				JFrame delDvd = new JFrame("Retirer un dvd");
 				setDefaultCloseOperation(EXIT_ON_CLOSE);
 				delDvd.setSize(800, 600);
 				DefaultListModel<DVD> model = new DefaultListModel<>();
@@ -150,7 +150,7 @@ public class TechnicianFrame extends MainFrame {
 						model.addElement(dvd);
 					}
 				}
-				JButton del = new JButton(new AbstractAction("retirer de l'al2000") {
+				JButton del = new JButton(new AbstractAction("Retirer de l'al2000") {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						DVD toChange = listedvd.getSelectedValue();
@@ -166,8 +166,8 @@ public class TechnicianFrame extends MainFrame {
 				delDvd.setVisible(true);
 			}
 		});
-		Panel.add(validate);
-		return Panel;
+		panel.add(validate);
+		return panel;
 
 
 	}
