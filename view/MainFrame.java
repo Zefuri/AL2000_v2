@@ -103,9 +103,21 @@ public class MainFrame extends JFrame {
 		JToolBar res = new JToolBar();
 		
 		res.add(userConnectionButtonAction(this));
+		res.add(depositButtonAction(this));
 		res.add(switchToTechModeButtonAction(this));
 		
 		return res;
+	}
+	
+	protected AbstractAction depositButtonAction(MainFrame me) {
+		return new AbstractAction("Déposer un dvd") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Fonction à venir ...");
+				// TODO implements
+			}
+		};
 	}
 	
 	private AbstractAction userConnectionButtonAction(MainFrame me) {

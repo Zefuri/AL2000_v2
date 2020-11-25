@@ -84,7 +84,7 @@ public class AL2000 {
 	public int montantLoc(Location loc) {
 		Date now = new Date();
 		Date old = loc.getDate();
-		int i = 1;
+		int i = 0;
 		int prix = 5;
 		if(loc.getClient().estAbonne()) {
 			prix = 4;

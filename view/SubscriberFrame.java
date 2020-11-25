@@ -36,6 +36,7 @@ public class SubscriberFrame extends MainFrame {
 		JToolBar res = new JToolBar();
 		
 		res.add(profilButtonAction(this));
+		res.add(depositButtonAction(this));
 		res.add(disconnectButtonAction(this));
 		
 		return res;
@@ -52,7 +53,7 @@ public class SubscriberFrame extends MainFrame {
 			}
 		};
 	}
-	
+
 	private AbstractAction disconnectButtonAction(SubscriberFrame me) {
 		return new AbstractAction("Deconnexion") {
 			
