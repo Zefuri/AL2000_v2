@@ -94,7 +94,8 @@ public class ProfilFrame extends MainFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				parentFrame.repaint();
+				SubscriberFrame subFrame = new SubscriberFrame(al2000, abonne);
+				subFrame.launch();
 				me.dispose();
 			}
 		};

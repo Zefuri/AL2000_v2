@@ -1,5 +1,5 @@
 INSERT INTO DVDS VALUES (0, 'Fast & Furious le retour','COMEDIE',1993,'Genghis khan','[Moreau, Dubois, Thomas, Fournier, Laurent]','Fast & Furious le retour un film plein de rebondissements','godfather.jpg', 1);
-INSERT INTO DVDS VALUES (1, 'power rangers le retour','COMEDIE',1986,'Candide Thovex','[Bernard, Fournier, Richard, Girard, Laurent]','power rangers le retour un film plein de rebondissements','godfather.jpg', 1);
+INSERT INTO DVDS VALUES (1, 'power rangers le retour','COMEDIE',1986,'Candide Thovex','[Bernard, Fournier, Richard, Girard, Laurent]','power rangers le retour un film plein de rebondissements','pulpfiction.jpg', 1);
 INSERT INTO DVDS VALUES (2, 'expandables le retour','DRAME',2000,'Jean','[Durand, Richard, Fournier, Simon, Roux]','expandables le retour un film plein de rebondissements','godfather.jpg', 1);
 INSERT INTO DVDS VALUES (3, 'my little pony le retour','ANIMATION',1964,'Rambo','[Durand, Roux, Fournier, Morel, Roux]','my little pony le retour un film plein de rebondissements','godfather.jpg', 1);
 INSERT INTO DVDS VALUES (4, 'oui-oui le retour','DRAME',1953,'Spielberg','[Morel, Fournier, Dubois, Bertrand, Dubois]','oui-oui le retour un film plein de rebondissements','godfather.jpg', 1);
