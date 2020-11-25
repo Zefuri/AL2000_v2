@@ -176,10 +176,11 @@ public class AddBd {
 
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
 
-			PreparedStatement addsign = conn.prepareStatement("INSERT INTO Signalement Values (?, ?)");
+			PreparedStatement addsign = conn.prepareStatement("INSERT INTO Signalement Values (?, ?, ?)");
 			
 			addsign.setInt(1, sign.getLocation().getId());
 			addsign.setString(2, sign.getMotif());
+			addsign.setInt(3, sign.getMontant());
 
 			addsign.executeUpdate();
 

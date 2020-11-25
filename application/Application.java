@@ -26,6 +26,7 @@ public class Application {
 			e.printStackTrace();
 		}
 		
+		/*
 		ArrayList<DVD> dvds = new ArrayList<DVD>();
 		dvds.add(new DVD(0, "The Godfather", Genre.DRAME, 2000, producer, new ArrayList<String>(), lorem, "godfather.jpg", true));
 		dvds.add(new DVD(1, "Joker", Genre.ACTION, 2000, producer, new ArrayList<String>(), lorem, "joker.jpg", true));
@@ -34,6 +35,7 @@ public class Application {
 		dvds.add(new DVD(4, "Titanic", Genre.DRAME, 2000, producer, new ArrayList<String>(), lorem, "titanic.jpg", true));
 
 		al2000.setDvds(dvds);
+		*/
 		al2000.addTech(1, "1");
 		System.out.println(al2000);
 		

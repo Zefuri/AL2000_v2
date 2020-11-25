@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import errors.BdIncoherenteException;
+import errors.LocationException;
 import errors.SubscriptionException;
 import errors.TechnicianException;
 import errors.WrongPasswordException;
@@ -35,6 +36,23 @@ public class AL2000 {
 		this.signalements = new ArrayList<>();
 		this.currentLocation = new ArrayList<>();
 		this.connected = false;
+	}
+	
+	public Location findDVDLoc(int idDVD) throws LocationException {
+		Location res = null;
+		
+		int i = 0;
+		while(i < this.currentLocation.size() && idDVD != this.currentLocation.get(i).getDvd().getId()) {
+			i++;
+		}
+		
+		if(i < this.currentLocation.size()) {
+			res = this.currentLocation.get(i);
+		} else {
+			throw new LocationException("Aucune locations ne correspond à ce DVD !");
+		}
+		
+		return res;
 	}
 	/**
 	 * @param idc the id of the client we want to find

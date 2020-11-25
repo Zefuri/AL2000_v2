@@ -25,6 +25,7 @@ import model.AL2000;
 import model.Abonne;
 import model.Client;
 import model.DVD;
+import model.Location;
 import model.Mode;
 import utils.AddBd;
 import utils.UpdateBd;
@@ -134,9 +135,12 @@ public class MovieFrame extends JFrame {
 					if(abo.getCredit() > 5) {
 						UpdateBd.updateCredit(abo, -5);
 						UpdateBd.updateDVD(dvd, me.getAL2000());
+						AddBd.addLocation(new Location(al2000.getCurrentLocation().size(), abo, dvd), al2000);
 						
 						locationFrame.setTitle("Location réussie !");
 						centerPanel.add(new JLabel("Location réussie, vous avez été débité de 5€ sur votre solde!"));
+						
+						System.out.println(dvd); // simulate the DVD going out of the machine
 					} else {
 						locationFrame.setTitle("Echec de la location ...");
 						centerPanel.add(new JLabel("Il semblerait que votre solde ne sois pas suffisant ..."));
@@ -187,10 +191,12 @@ public class MovieFrame extends JFrame {
 						
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							AddBd.addClient(me.getAL2000().createNewClient(mailField.getText(), String.valueOf(cardField.getPassword())), me.getAL2000());
+							Client newClient = me.getAL2000().createNewClient(mailField.getText(), String.valueOf(cardField.getPassword()));
+							AddBd.addClient(newClient, me.getAL2000());
 							locationFrame.dispose();
 							
 							UpdateBd.updateDVD(dvd, me.getAL2000());
+							AddBd.addLocation(new Location(al2000.getCurrentLocation().size(), newClient, dvd), al2000);
 							
 							JFrame doneFrame = new JFrame("Location réussie !");
 							doneFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -217,6 +223,8 @@ public class MovieFrame extends JFrame {
 										subFrame.launch();
 									}
 									me.dispose();
+									
+									System.out.println(dvd); // simulate the DVD going out of the machine
 								}
 							}));
 							

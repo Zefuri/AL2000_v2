@@ -23,4 +23,8 @@ public class Signalement {
 	public String getMotif() {
 		return motif;
 	}
+	
+	public int getMontant() {
+		return montant;
+	}
 }
