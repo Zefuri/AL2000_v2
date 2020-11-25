@@ -13,6 +13,7 @@ import errors.WrongPasswordException;
 import utils.AddBd;
 import utils.DelBd;
 import utils.InitBd;
+import utils.UpdateBd;
 
 public class AL2000 {
 	
@@ -104,6 +105,12 @@ public class AL2000 {
 	 */
 	public void rendreLocation(Location loc) {
 		DelBd.delLocation(loc, this);
+		for(DVD dvd : this.dvds) {
+			if(dvd.getId() == loc.getDvd().getId()) {
+				 UpdateBd.updateDVD(dvd, this);
+				 break;
+			}
+		}
 		if(loc.getClient().estAbonne()) {
 			AddBd.addHisto(loc);
 		}
@@ -153,6 +160,10 @@ public class AL2000 {
 	public void setTechniciens(HashMap<Integer, Technicien> techniciens) {
 		this.techniciens = techniciens;
 	}
+	
+	public void addTech(int idt, String mdp) {
+		this.getTechniciens().put(idt, new Technicien(this, mdp));
+	}
 
 	public ArrayList<DVD> getDvds() {
 		return dvds;
@@ -172,7 +183,7 @@ public class AL2000 {
 	
 	@Override
 	public String toString() {
-		return "AL2000 [mode=" + mode + ", clients=" + clients + "\n" + ", Abonnes=" + abonnes + "\n" + ", techniciens=" + (techniciens==null)+ "\n"
+		return "AL2000 [mode=" + mode + ", clients=" + clients + "\n" + ", Abonnes=" + abonnes + "\n" + ", techniciens=" + (techniciens.get(1) == null)+ "\n"
 				+ ", dvds=" + (dvds == null)+ "\n" + ", signalements=" + (signalements== null)+ "\n" + "]";
 	}
 	

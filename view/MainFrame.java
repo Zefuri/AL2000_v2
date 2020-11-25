@@ -227,11 +227,15 @@ public class MainFrame extends JFrame {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						int id = Integer.parseInt(idField.getText());
-						String pwd = pwdField.getSelectedText();
+						char[] pwd = pwdField.getPassword();
+						String strpwd = "";
+						for(char c : pwd) {
+							strpwd += c;
+						}
 						
 						Technicien tech = null;
 						try {
-							tech = al2000.modeMaintenance(id, pwd);
+							tech = al2000.modeMaintenance(id, strpwd);
 						} catch (TechnicianException | WrongPasswordException e1) {
 							e1.printStackTrace();
 						}

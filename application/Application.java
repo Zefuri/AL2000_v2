@@ -17,27 +17,25 @@ public class Application {
 
 	public static void main(String[] args) {
 		AL2000 al2000 = new AL2000();
+		InitBd.initBD();
 
 		try {
 			InitBd.initAl2000(al2000);
 		} catch (BdIncoherenteException e) {
 			e.printStackTrace();
 		}
+	
 		
-		System.out.println(al2000);
-		
-		ArrayList<DVD> dvds = new ArrayList<DVD>();
-		
-		DVD theOnlyOne = new DVD(0, "The Godfather", Genre.DRAME, 2000, producer, new ArrayList<String>(), lorem, "godfather.jpg");
-		theOnlyOne.changeDispoLoc();
-		
-		dvds.add(theOnlyOne);
-		dvds.add(new DVD(1, "Joker", Genre.ACTION, 2000, producer, new ArrayList<String>(), lorem, "joker.jpg"));
-		dvds.add(new DVD(2, "Pulp Fiction", Genre.ACTION, 2000, producer, new ArrayList<String>(), lorem, "pulpfiction.jpg"));
-		dvds.add(new DVD(3, "The Dictator", Genre.COMEDIE, 2000, producer, new ArrayList<String>(), lorem, "thedictator.jpg"));
-		dvds.add(new DVD(4, "Titanic", Genre.DRAME, 2000, producer, new ArrayList<String>(), lorem, "titanic.jpg"));
+		/*ArrayList<DVD> dvds = new ArrayList<DVD>();
+		dvds.add(new DVD(0, "The Godfather", Genre.DRAME, 2000, "", new ArrayList<String>(), "", "godfather.jpg", true));
+		dvds.add(new DVD(1, "Joker", Genre.ACTION, 2000, "", new ArrayList<String>(), "", "joker.jpg", true));
+		dvds.add(new DVD(2, "Pulp Fiction", Genre.ACTION, 2000, "", new ArrayList<String>(), "", "pulpfiction.jpg", true));
+		dvds.add(new DVD(3, "The Dictator", Genre.COMEDIE, 2000, "", new ArrayList<String>(), "", "thedictator.jpg", true));
+		dvds.add(new DVD(4, "Titanic", Genre.DRAME, 2000, "", new ArrayList<String>(), "", "titanic.jpg", true));
 
-		al2000.setDvds(dvds);
+		al2000.setDvds(dvds);*/
+		al2000.addTech(1, "1");
+		System.out.println(al2000);
 		
 		MainFrame mainFrame = new MainFrame(al2000);
 		mainFrame.launch();

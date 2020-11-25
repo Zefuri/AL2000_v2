@@ -48,7 +48,7 @@ public class Testadd {
 			AddBd.addClient(cli, al);
 			System.out.println("addclient good");
 			
-			AddBd.addDVD(new DVD(0, null, null, 0, null, null, null, null), al);
+			AddBd.addDVD(new DVD(0, null, null, 0, null, null, null, null, false), al);
 			
 			
 			

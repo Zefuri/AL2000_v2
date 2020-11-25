@@ -118,7 +118,7 @@ public final class InitBd {
 	}
 
 	private static String[] createqueries(String path) {
-		DVD dvd = new DVD(0, null, null, 0, null, null, null, null);
+		DVD dvd = new DVD(0, null, null, 0, null, null, null, null, false);
 		URL url = dvd.getClass().getResource(path);
 		File data = new File(url.getPath());
 		String initbd = "";
@@ -310,7 +310,7 @@ public final class InitBd {
 						.add(new DVD(resultats.getInt("idD"), resultats.getString("title"),
 								Genre.valueOf(resultats.getString("genre").toUpperCase()),
 								resultats.getInt("releaseYear"), resultats.getString("producer"), actors,
-								resultats.getString("summary"), resultats.getString("urlImage")));
+								resultats.getString("summary"), resultats.getString("urlImage"), resultats.getBoolean("dispoloc")));
 			}
 
 			conn.close();

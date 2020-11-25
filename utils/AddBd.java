@@ -67,7 +67,7 @@ public class AddBd {
 
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
 
-			PreparedStatement addDvd = conn.prepareStatement("INSERT INTO DVDs Values (?, ?, ?, ?, ?, ?, ?, ?)");
+			PreparedStatement addDvd = conn.prepareStatement("INSERT INTO DVDs Values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			
 			addDvd.setInt(1, dvd.getId());
 			addDvd.setString(2, dvd.getTitle());
@@ -77,6 +77,7 @@ public class AddBd {
 			addDvd.setString(6, dvd.getActors().toString());
 			addDvd.setString(7, dvd.getSummary());
 			addDvd.setString(8, dvd.getUrlImage());
+			addDvd.setBoolean(9, dvd.isDispoLoc());
 			
 
 			addDvd.executeUpdate();
