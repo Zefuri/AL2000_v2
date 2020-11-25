@@ -133,8 +133,7 @@ public class MovieFrame extends JFrame {
 					
 					if(abo.getCredit() > 5) {
 						UpdateBd.updateCredit(abo, -5);
-						// TODO UpdateBd.updateDVDDispoLoc
-						me.rentDVD();
+						UpdateBd.updateDVD(dvd, me.getAL2000());
 						
 						locationFrame.setTitle("Location réussie !");
 						centerPanel.add(new JLabel("Location réussie, vous avez été débité de 5€ sur votre solde!"));
@@ -191,8 +190,7 @@ public class MovieFrame extends JFrame {
 							AddBd.addClient(me.getAL2000().createNewClient(mailField.getText(), String.valueOf(cardField.getPassword())), me.getAL2000());
 							locationFrame.dispose();
 							
-							// TODO UpdateBd.updateDVD()
-							me.rentDVD();
+							UpdateBd.updateDVD(dvd, me.getAL2000());
 							
 							JFrame doneFrame = new JFrame("Location réussie !");
 							doneFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -255,9 +253,5 @@ public class MovieFrame extends JFrame {
 	
 	private AL2000 getAL2000() {
 		return al2000;
-	}
-	
-	private void rentDVD() {
-		this.dvd.changeDispoLoc();
 	}
 }
