@@ -1,12 +1,22 @@
 package view;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.JSplitPane;
+import javax.swing.JButton;
 
 import model.AL2000;
 import model.Abonne;
+import utils.UpdateBd;
 
 public class SubscriberFrame extends MainFrame {
 	private Abonne abonne;
@@ -25,46 +35,33 @@ public class SubscriberFrame extends MainFrame {
 	protected JToolBar createToolBar() {
 		JToolBar res = new JToolBar();
 		
-		res.add(historyButtonAction());
-		res.add(locationsButtonAction());
+		res.add(profilButtonAction(this));
 		res.add(disconnectButtonAction(this.al2000, this));
 		
 		return res;
 	}
 	
-	private AbstractAction historyButtonAction() {
-		return new AbstractAction("Historique") {
+	private AbstractAction profilButtonAction(SubscriberFrame me) {
+		return new AbstractAction("Profil") {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO implements the HistoryFrame
-			}
-		};
-	}
-	
-	private AbstractAction locationsButtonAction() {
-		return new AbstractAction("Locations") {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO implements LocationsFrame
+				ProfilFrame profilFrame = new ProfilFrame(al2000, abonne, me);
+				profilFrame.launch();
+				me.setVisible(false);
 			}
 		};
 	}
 	
 	private AbstractAction disconnectButtonAction(AL2000 al2000, SubscriberFrame me) {
-		return new AbstractAction("Déconnexion") {
+		return new AbstractAction("Deconnexion") {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				MainFrame mainFrame = new MainFrame(al2000);
+				mainFrame.launch();
 				me.dispose();
 			}
 		};
-	}
-	
-	@Override
-	public Abonne getConnectedSubscriber() {
-		return this.abonne;
 	}
 }
