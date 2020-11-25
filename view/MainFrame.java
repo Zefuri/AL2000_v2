@@ -31,31 +31,33 @@ import model.Technicien;
 public class MainFrame extends JFrame {
 	protected AL2000 al2000;
 	protected String welcomingMessage;
-
+	
+	private JPanel mainPanel;
+	private JPanel northPanel;
+	private JScrollPane centerPanel;
+	private JToolBar southToolBar;
+	
 	public MainFrame(AL2000 al2000) {
 		super("AL2000");
 		this.al2000 = al2000;
-		this.welcomingMessage = "Bienvenue dans l'AL2000";
-	}
-	
-	public void launch() {
+		this.welcomingMessage = "Bienvenue dans l'AL2000 !";
+		
 		this.setPreferredSize(new Dimension(800, 600));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		JPanel mainPanel = new JPanel(new BorderLayout());
+		this.mainPanel = new JPanel(new BorderLayout());
+		this.northPanel = createNorthPanel();
+		this.centerPanel = new JScrollPane(createScrollMovie());
+		this.southToolBar = createToolBar();
 		
-		JPanel northPanel = createNorthPanel();
+		this.mainPanel.add(this.northPanel, BorderLayout.NORTH);
+		this.mainPanel.add(this.centerPanel, BorderLayout.CENTER);
+		this.mainPanel.add(this.southToolBar, BorderLayout.SOUTH);
 		
-		JPanel scrollableMoviePane = createScrollMovie();
-		JScrollPane centerPanel = new JScrollPane(scrollableMoviePane);
-		
-		JToolBar southToolBar = createToolBar();
-		
-		mainPanel.add(northPanel, BorderLayout.NORTH);
-		mainPanel.add(centerPanel, BorderLayout.CENTER);
-		mainPanel.add(southToolBar, BorderLayout.SOUTH);
-		
-		this.add(mainPanel);
+		this.add(this.mainPanel);
+	}
+
+	public void launch() {
 		this.pack();
 		this.setVisible(true);
 	}
@@ -267,7 +269,7 @@ public class MainFrame extends JFrame {
 	public void switchToMovieFrame(DVD dvd) {
 		MovieFrame movieFrame = new MovieFrame(this, dvd, this.al2000);
 		movieFrame.launch();
-		this.setVisible(false);
+		this.dispose();
 	}
 	
 	public Abonne getConnectedSubscriber() {

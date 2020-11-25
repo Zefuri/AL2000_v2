@@ -83,24 +83,24 @@ public class ProfilFrame extends MainFrame {
 	protected JToolBar createToolBar() {
 		JToolBar res = new JToolBar();
 
-		res.add(homeButtonAction(this, this.parentFrame));
-		res.add(disconnectButtonAction(this.al2000, this));
+		res.add(homeButtonAction(this));
+		res.add(disconnectButtonAction(this));
 
 		return res;
 	}
 
-	private AbstractAction homeButtonAction(ProfilFrame me, SubscriberFrame parentFrame) {
+	private AbstractAction homeButtonAction(ProfilFrame me) {
 		return new AbstractAction("Accueil") {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				parentFrame.repaint();
 				me.dispose();
-				parentFrame.setVisible(true);
 			}
 		};
 	}
 
-	private AbstractAction disconnectButtonAction(AL2000 al2000, ProfilFrame me) {
+	private AbstractAction disconnectButtonAction(ProfilFrame me) {
 		return new AbstractAction("Deconnexion") {
 
 			@Override
