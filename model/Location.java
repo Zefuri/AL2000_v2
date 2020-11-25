@@ -5,7 +5,7 @@ import java.sql.Date;
 public class Location {
 	@Override
 	public String toString() {
-		return "Location [id=" + id + ", client=" + client + ", dvd=" + dvd + ", date=" + date + "]";
+		return "Location " + id + ", dvd=" + dvd + ", date=" + date;
 	}
 
 	private int id;

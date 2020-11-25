@@ -78,12 +78,21 @@ public class TechnicianFrame extends MainFrame {
 				label.setText("selectionnez un signalement");
 				Signalement aDel = listeSign.getSelectedValue();
 				Location loc = aDel.getLocation();
+				if(loc.getClient().estAbonne()) {
+					UpdateBd.updateCredit(null, aDel.getMontant());
+				}
+				JFrame remb = new JFrame("notif");
+				remb.setSize(200, 100);
+				remb.add(new JLabel("Le client a été remboursé, ou crédité si il était abonné"));
+				remb.pack();
+				remb.setVisible(true);
 				model.removeElement(aDel);
 				DelBd.delSign(aDel, al2000);
 			}
 		});
-
-		eastP.add(buttonmoins, BorderLayout.SOUTH);
+		
+		JSplitPane splitb = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, buttonmoins, buttonremb);
+		eastP.add(splitb, BorderLayout.SOUTH);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listeSign, eastP);
 

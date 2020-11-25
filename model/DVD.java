@@ -5,9 +5,8 @@ import java.util.ArrayList;
 public class DVD {
 	@Override
 	public String toString() {
-		return "DVD [id=" + id + ", title=" + title + ", genre=" + genre + ", releaseDate=" + releaseDate
-				+ ", producer=" + producer + ", actors=" + actors + ", summary=" + summary + ", dispoLoc=" + dispoLoc
-				+ ", urlImage=" + urlImage + "]";
+		return "DVD " + id + " " + title + " de " + producer + " \n"+ genre + " \n sorti en :" + releaseDate
+				+"\n acteurs principaux" + actors + ", summary=" + summary;
 	}
 
 	private int id;

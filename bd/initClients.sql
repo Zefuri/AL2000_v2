@@ -9,3 +9,4 @@ INSERT INTO CLIENT VALUES (183, 'jambooon@gmail.com', 0006545654);
 INSERT INTO ABONNE VALUES (000, 'fakeAbo@dontuse.me', 0000, 'plzdont', 999);
 INSERT INTO ABONNE VALUES (103, 'abodesqueezie@gmail.com', '118218', 'squeezielebest', 999);
 INSERT INTO ABONNE VALUES (999, 'xxXdarkillerXxx@gmail.com', 123456789, 'mdp', 20);
+INSERT INTO ABONNE VALUES (1, 'xxXdarkiller2Xxx@gmail.com', 123456789, '1', 50);
