@@ -98,3 +98,5 @@ INSERT INTO DVDS VALUES (96, 'le choc des titans sur jupiter','SCI_FI',2002,'Obi
 INSERT INTO DVDS VALUES (97, 'Neymar sur jupiter','ANIMATION',1944,'Spielberg','[Petit, Moreau, Durand, Laurent, Durand]','Neymar sur jupiter un film plein de rebondissements','godfather.jpg', 1);
 INSERT INTO DVDS VALUES (98, 'avengers sur jupiter','SCI_FI',1974,'Jean','[Laurent, David, Fournier, Bertrand, Michel]','avengers sur jupiter un film plein de rebondissements','godfather.jpg', 1);
 INSERT INTO DVDS VALUES (99, 'hunger games sur jupiter','ACTION',1997,'Obi wan','[Leroy, Girard, David, Laurent, Fournier]','hunger games sur jupiter un film plein de rebondissements','godfather.jpg', 1);
+INSERT INTO DVDS VALUES (100, 'PETIT PONEYYYYYYYYYYYY','ACTION',1997,'Obi wan','[Leroy, Girard, David, Laurent, Fournier]','hunger games sur jupiter un film plein de rebondissements','godfather.jpg', 0);
+INSERT INTO DVDS VALUES (101, 'switch cork 5 bow&arrow le banger','ACTION',1997,'Obi wan','[Leroy, Girard, David, Laurent, Fournier]','best trick to try','godfather.jpg', 0);

@@ -3,7 +3,7 @@ package model;
 public class Signalement {
 	@Override
 	public String toString() {
-		return "Signalement [location=" + location + ", motif=" + motif + "]";
+		return "id Location : " + getLocation().getId() + ", id Abonne : " + getLocation().getClient().getIdc();
 	}
 
 	private Location location;

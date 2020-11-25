@@ -30,7 +30,7 @@ public class UpdateBd {
 	 * @param montant the amount of money added or substracted form his credit
 	 */
 	public static void updateCredit(Abonne abo, int montant) {
-		if(abo == null) {
+		if(abo == null) {	
 			return;
 		}
 		int oldCred = abo.getCredit();
@@ -81,7 +81,7 @@ public class UpdateBd {
 
 			conn = DriverManager.getConnection(CONN_URL, USER, PASSWD);
 
-			PreparedStatement remDvd = conn.prepareStatement("UPDATE DVD set dispoloc = ? WHERE idD = ?");
+			PreparedStatement remDvd = conn.prepareStatement("UPDATE DVDs set dispoloc = ? WHERE idD = ?");
 
 			remDvd.setInt(2, dvd.getId());
 			remDvd.setBoolean(1, dvd.isDispoLoc());

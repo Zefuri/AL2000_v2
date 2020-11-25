@@ -2,8 +2,10 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -17,43 +19,37 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 import controller.MovieListener;
+import errors.SubscriptionException;
+import errors.TechnicianException;
+import errors.WrongPasswordException;
 import model.AL2000;
 import model.Abonne;
+import model.Client;
 import model.DVD;
+import model.Technicien;
 
 public class MainFrame extends JFrame {
-	private AL2000 al2000;
+	protected AL2000 al2000;
+	protected String welcomingMessage;
 
 	public MainFrame(AL2000 al2000) {
 		super("AL2000");
 		this.al2000 = al2000;
+		this.welcomingMessage = "Bienvenue dans l'AL2000";
 	}
-
+	
 	public void launch() {
 		this.setPreferredSize(new Dimension(800, 600));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		
-		JPanel northPanel = new JPanel();
-		northPanel.add(new JLabel("Bienvenue dans l'AL2000"));
+		JPanel northPanel = createNorthPanel();
 		
-		JPanel scrollableMoviePane = new JPanel();
-		
-		for(int i = 0; i < this.al2000.getDvds().size(); i++) {
-			DVD curDVD = this.al2000.getDvds().get(i);
-			
-			MoviePanel curMoviePanel = new MoviePanel(curDVD.getUrlImage(), curDVD);
-			curMoviePanel.addMouseListener(new MovieListener(this, curDVD));
-			
-			scrollableMoviePane.add(curMoviePanel);
-		}
+		JPanel scrollableMoviePane = createScrollMovie();
 		JScrollPane centerPanel = new JScrollPane(scrollableMoviePane);
 		
-		JToolBar southToolBar = new JToolBar();
-		
-		southToolBar.add(userConnectionButtonAction());
-		southToolBar.add(switchToTechModeButtonAction());
+		JToolBar southToolBar = createToolBar();
 		
 		mainPanel.add(northPanel, BorderLayout.NORTH);
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
@@ -64,7 +60,53 @@ public class MainFrame extends JFrame {
 		this.setVisible(true);
 	}
 	
-	private AbstractAction userConnectionButtonAction() {
+	/**
+	 * Create the welcoming message at the top of the frame
+	 * @return the JPanel with the JLabel corresponding added
+	 */
+	protected JPanel createNorthPanel() {
+		JPanel res = new JPanel();
+		
+		res.add(new JLabel(this.welcomingMessage));
+		
+		return res;
+	}
+	
+	/**
+	 * Create the scroll movie thing at the center of the frame
+	 * @return the JPanel with all the MoviePanel added
+	 */
+	protected JPanel createScrollMovie() {
+		JPanel res = new JPanel();
+		
+		for(int i = 0; i < this.al2000.getDvds().size(); i++) {
+			DVD curDVD = this.al2000.getDvds().get(i);
+			
+			if (curDVD.isDispoLoc()) {
+				MoviePanel curMoviePanel = new MoviePanel(curDVD);
+				curMoviePanel.addMouseListener(new MovieListener(this, curDVD));
+				
+				res.add(curMoviePanel);
+			}
+		}
+		
+		return res;
+	}
+	
+	/**
+	 * Create the ToolBar with all the needed buttons
+	 * @return the JToolBar with all needs added
+	 */
+	protected JToolBar createToolBar() {
+		JToolBar res = new JToolBar();
+		
+		res.add(userConnectionButtonAction(this));
+		res.add(switchToTechModeButtonAction(this));
+		
+		return res;
+	}
+	
+	private AbstractAction userConnectionButtonAction(MainFrame me) {
 		
 		return new AbstractAction("Connexion") {
 			
@@ -104,18 +146,20 @@ public class MainFrame extends JFrame {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						int id = Integer.parseInt(idField.getText());
-						String pwd = pwdField.getSelectedText();
+						String pwd = String.valueOf(pwdField.getPassword());
 						
-						if(al2000.getAbonnes().size() > id) {
-							if(al2000.getAbonnes().get(id).verifierMdp(pwd)) {
-								SubscriberFrame subFrame = new SubscriberFrame(al2000, al2000.getAbonnes().get(id));
-								connectionFrame.dispose();
-							} else {
-								System.err.println("Mot de passe incorrect : réessayez !");
-							}
-						} else {
-							System.err.println("Client introuvable ou non abonné au service !");
+						Abonne abo = null;
+						try {
+							abo = al2000.connectAbonne(id, pwd);
+						} catch (SubscriptionException | WrongPasswordException e1) {
+							e1.printStackTrace();
+						}
+						
+						if(abo != null) {
+							SubscriberFrame subFrame = new SubscriberFrame(al2000, abo);
+							subFrame.launch();
 							connectionFrame.dispose();
+							me.dispose();
 						}
 					}
 				});
@@ -141,7 +185,7 @@ public class MainFrame extends JFrame {
 		};
 	}
 
-	private AbstractAction switchToTechModeButtonAction() {
+	private AbstractAction switchToTechModeButtonAction(MainFrame me) {
 
 		return new AbstractAction("Maintenance") {
 			
@@ -181,18 +225,24 @@ public class MainFrame extends JFrame {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						int id = Integer.parseInt(idField.getText());
-						String pwd = pwdField.getSelectedText();
+						char[] pwd = pwdField.getPassword();
+						String strpwd = "";
+						for(char c : pwd) {
+							strpwd += c;
+						}
 						
-						if(al2000.getTechniciens().containsKey(id)) {
-							if(al2000.getTechniciens().get(id).connexion(pwd)) {
-								// TODO implements new SubscriberFrame
-								connectionFrame.dispose();
-							} else {
-								System.err.println("Mot de passe incorrect : réessayez !");
-							}
-						} else {
-							System.err.println("Technicien inexistant.");
+						Technicien tech = null;
+						try {
+							tech = al2000.modeMaintenance(id, strpwd);
+						} catch (TechnicianException | WrongPasswordException e1) {
+							e1.printStackTrace();
+						}
+						
+						if(tech != null) {
+							TechnicianFrame techFrame = new TechnicianFrame(al2000);
+							techFrame.launch();
 							connectionFrame.dispose();
+							me.dispose();
 						}
 					}
 				});
@@ -219,8 +269,12 @@ public class MainFrame extends JFrame {
 	}
 
 	public void switchToMovieFrame(DVD dvd) {
-		MovieFrame movieFrame = new MovieFrame(this, dvd);
+		MovieFrame movieFrame = new MovieFrame(this, dvd, this.al2000);
 		movieFrame.launch();
 		this.setVisible(false);
+	}
+	
+	public Abonne getConnectedSubscriber() {
+		return null;
 	}
 }

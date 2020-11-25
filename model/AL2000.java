@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.HashMap;
 
 import errors.BdIncoherenteException;
+import errors.SubscriptionException;
+import errors.TechnicianException;
 import errors.WrongPasswordException;
 import utils.AddBd;
 import utils.DelBd;
@@ -14,10 +16,9 @@ import utils.InitBd;
 import utils.UpdateBd;
 
 public class AL2000 {
-
-
-
+	
 	private Mode mode;
+	private boolean connected;
 	private ArrayList<Client> clients;
 	private ArrayList<Abonne> abonnes;
 	private HashMap<Integer, Technicien> techniciens;
@@ -33,20 +34,46 @@ public class AL2000 {
 		this.abonnes = new ArrayList<>();
 		this.signalements = new ArrayList<>();
 		this.currentLocation = new ArrayList<>();
+		this.connected = false;
 	}
 	/**
-	 * 
-	 * @param list the list of Client or the list of Abonne
 	 * @param idc the id of the client we want to find
 	 * @return the client with the id idc or null if the client is not in the list
 	 */
-	public Client getClientId(ArrayList<Client> list, int idc) {
-		for(Client cli : list) {
+	public Client getClientId(int idc) {
+		for(Client cli : this.clients) {
 			if(cli.getIdc() == idc) {
 				return cli;
 			}
 		}
 		return null;
+	}
+	/**
+	 * @param ida the id of the subscriber we want to find
+	 * @param pwd the password of the subscriber
+	 * @return the subscriber with the id ida
+	 */
+	public Abonne connectAbonne(int ida, String pwd) throws SubscriptionException, WrongPasswordException {
+		Abonne res = null;
+		
+		int i = 0;
+		while(i < this.abonnes.size() && ida != this.abonnes.get(i).getIdc()) {
+			i++;
+		}
+		
+		if(i < this.abonnes.size()) {
+			res = this.abonnes.get(i);
+			
+			if (res.verifierMdp(pwd)) {
+				this.connected = true;
+			} else {
+				throw new WrongPasswordException("Mot de passe erronné : réessayez !");
+			}
+		} else {
+			throw new SubscriptionException("Abonné introuvable !");
+		}
+		
+		return res;
 	}
 	/**
 	 * give us the amount of money the customer owe us, being 4/day for Abonne and 5/day otherwise
@@ -113,6 +140,10 @@ public class AL2000 {
 	public void setMode(Mode mode) {
 		this.mode = mode;
 	}
+	
+	public boolean isConnected() {
+		return this.connected;
+	}
 
 	public ArrayList<Client> getClients() {
 		return clients;
@@ -128,6 +159,10 @@ public class AL2000 {
 
 	public void setTechniciens(HashMap<Integer, Technicien> techniciens) {
 		this.techniciens = techniciens;
+	}
+	
+	public void addTech(int idt, String mdp) {
+		this.getTechniciens().put(idt, new Technicien(this, mdp));
 	}
 
 	public ArrayList<DVD> getDvds() {
@@ -148,7 +183,7 @@ public class AL2000 {
 	
 	@Override
 	public String toString() {
-		return "AL2000 [mode=" + mode + ", clients=" + clients + "\n" + ", Abonnes=" + abonnes + "\n" + ", techniciens=" + (techniciens==null)+ "\n"
+		return "AL2000 [mode=" + mode + ", clients=" + clients + "\n" + ", Abonnes=" + abonnes + "\n" + ", techniciens=" + (techniciens.get(1) == null)+ "\n"
 				+ ", dvds=" + (dvds == null)+ "\n" + ", signalements=" + (signalements== null)+ "\n" + "]";
 	}
 	
@@ -162,22 +197,41 @@ public class AL2000 {
 		
 	}
 
-	public void modeMaintenance(int idTech, String mdp) throws WrongPasswordException {
+	public Technicien modeMaintenance(int idTech, String mdp) throws TechnicianException, WrongPasswordException {
+		Technicien res = null;
+		
 		switch(mode) {
 			case MAINTENANCE:
 				this.mode = Mode.UTILISATEUR;
+				this.connected = false;
 				break;
 			case UTILISATEUR:
 				if(techniciens.containsKey(idTech)) {
 					if(techniciens.get(idTech).connexion(mdp)) {
+						res= techniciens.get(idTech);
 						this.mode = Mode.MAINTENANCE;
+						this.connected = true;
 					} else {
-						throw new WrongPasswordException("Mauvais mot de passe, connexion impossible.");
+						throw new WrongPasswordException("Mot de passe erroné : réessayez !");
 					}
+				} else {
+					throw new TechnicianException("Technicien introuvable §");
 				}
 		}
 		
+		return res;
 	}
 	
+	public Client createNewClient(String mail, String numCB) {
+		int max = 0;
+		
+		for(Client c : this.clients) {
+			if(c.getIdc() > max) {
+				max = c.getIdc();
+			}
+		}
+		
+		return new Client(numCB, mail, max+1);
+	}
 	
 }

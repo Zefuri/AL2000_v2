@@ -15,6 +15,7 @@ public class Technicien {
 	}
 	
 	public boolean connexion(String mdp) {
+		System.out.println(mdp + "test"+ this.mdp);
 		return this.mdp.equals(mdp);
 	}
 	

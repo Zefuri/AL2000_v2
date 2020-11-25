@@ -103,4 +103,20 @@ public class DVD {
 	public void changeDispoLoc() {
 		this.dispoLoc = !dispoLoc;
 	}
+
+	public String getActorsAsString() {
+		String res = "";
+		
+		if(this.actors.size() != 0) {
+			res = this.actors.get(0);
+			
+			int i;
+			for(i = 1; i < this.actors.size()-1; i++) {
+				res += ", " + this.actors.get(i);
+			}
+			
+			res += "et " + this.actors.get(i);
+		}
+		return res;
+	}
 }
