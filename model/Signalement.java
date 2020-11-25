@@ -16,6 +16,14 @@ public class Signalement {
 		this.montant = montant;
 	}
 
+	public int getMontant() {
+		return montant;
+	}
+
+	public void setMontant(int montant) {
+		this.montant = montant;
+	}
+
 	public Location getLocation() {
 		return location;
 	}

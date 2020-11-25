@@ -13,17 +13,33 @@ public class ImagePanel extends JPanel{
 	
 	public ImagePanel(Dimension dimension, String dustJacketPath) {
 		this.setPreferredSize(dimension);
-		try {
-			this.dustJacket = ImageIO.read(this.getClass().getResourceAsStream("/resources/" + dustJacketPath));
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.err.println(dustJacketPath + " fichier ou chemin introuvable.");
+		setImagePanel(dustJacketPath);
+
+	}
+	
+	public ImagePanel(String dustJacketPath) {
+		setImagePanel(dustJacketPath);
+
+	}
+	
+	public void setImagePanel(String dustJacketPath) {
+		if(dustJacketPath != null) {
+			try {
+				this.dustJacket = ImageIO.read(this.getClass().getResourceAsStream("/resources/" + dustJacketPath));
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.err.println(dustJacketPath + " fichier ou chemin introuvable.");
+			}
+		}else {
+			dustJacket = null;
 		}
 	}
 
 	@Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(dustJacket, 0, 0, this.getSize().width, this.getSize().height, this);           
+        if(dustJacket != null) {
+            g.drawImage(dustJacket, 0, 0, this.getSize().width, this.getSize().height, this);           
+        }
     }
 }

@@ -33,7 +33,7 @@ public class Application {
 		dvds.add(new DVD(3, "The Dictator", Genre.COMEDIE, 2000, producer, new ArrayList<String>(), lorem, "thedictator.jpg", true));
 		dvds.add(new DVD(4, "Titanic", Genre.DRAME, 2000, producer, new ArrayList<String>(), lorem, "titanic.jpg", true));
 
-		al2000.setDvds(dvds);
+		//al2000.setDvds(dvds);
 		al2000.addTech(1, "1");
 		System.out.println(al2000);
 		

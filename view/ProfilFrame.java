@@ -6,16 +6,26 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.DefaultListModel;
+
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+
+import controller.HistoCtrl;
+import controller.SignalCtrl;
+
 import javax.swing.JSplitPane;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 
 import model.AL2000;
 import model.Abonne;
+import model.Location;
+import model.Signalement;
 import utils.UpdateBd;
 
 public class ProfilFrame extends MainFrame {
@@ -85,8 +95,37 @@ public class ProfilFrame extends MainFrame {
 
 		res.add(homeButtonAction(this));
 		res.add(disconnectButtonAction(this));
+		res.add(historique(this));
 
 		return res;
+	}
+	
+	private AbstractAction historique(ProfilFrame me) {
+		return new AbstractAction("historique") {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame histo = new JFrame("Historique");
+				DefaultListModel<Location> model = new DefaultListModel<>();
+				JList<Location> listeHisto = new JList<>(model);
+				
+				ImagePanel img = new ImagePanel(new Dimension(400, 800), null);
+				
+				JSplitPane splitb = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listeHisto, img);
+
+				
+				listeHisto.addListSelectionListener(new HistoCtrl(img, listeHisto));
+				
+
+				for (Location loc : me.abonne.getHistorique()) {
+					model.addElement(loc);
+				}
+				
+				histo.add(splitb);
+				histo.pack();
+				histo.setVisible(true);
+			}
+		};
 	}
 
 	private AbstractAction homeButtonAction(ProfilFrame me) {
