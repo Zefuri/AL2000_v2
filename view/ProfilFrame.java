@@ -50,9 +50,9 @@ public class ProfilFrame extends MainFrame {
 
 		JPanel labelPanelCenter = new JPanel(new GridLayout(3, 1));
 		// Email
-		labelPanelCenter.add(new JLabel("Email :" + abonne.getMail()));
+		labelPanelCenter.add(new JLabel("Email : " + abonne.getMail()));
 		// Credit
-		JLabel credit = new JLabel("Credit en Euros :" + abonne.getCredit());
+		JLabel credit = new JLabel("Credit en Euros : " + abonne.getCredit());
 		labelPanelCenter.add(credit);
 		// Recharger
 		JTextField textField = new JTextField("15");
@@ -65,11 +65,9 @@ public class ProfilFrame extends MainFrame {
 
 		JButton boutonRecharge = new JButton("Recharger");
 		boutonRecharge.addActionListener(actionEvent -> {
-			abonne.setCredit(abonne.getCredit() + Integer.parseInt(textField.getText()));
+			UpdateBd.updateCredit(abonne, Integer.parseInt(textField.getText()));
 			credit.setText("Credit en Euros :" + abonne.getCredit());
-			UpdateBd.updateCredit(abonne, abonne.getCredit());
 			this.pack();
-			System.out.println(abonne.getCredit());
 		});
 		sFooter.add(boutonRecharge);
 
