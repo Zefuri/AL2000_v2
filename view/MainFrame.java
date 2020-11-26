@@ -110,6 +110,7 @@ public class MainFrame extends JFrame {
 		
 		res.add(userConnectionButtonAction(this));
 		res.add(depositButtonAction(this));
+		res.add(signUpButtonAction());
 		res.add(switchToTechModeButtonAction(this));
 		
 		return res;
@@ -226,6 +227,17 @@ public class MainFrame extends JFrame {
 				depositFrame.add(mainPanel);
 				depositFrame.pack();
 				depositFrame.setVisible(true);
+			}
+		};
+	}
+	
+	private AbstractAction signUpButtonAction() {
+		return new AbstractAction("S'abonner") {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SubscriptionFrame subscribeFrame = new SubscriptionFrame(al2000);
+				subscribeFrame.launch();
 			}
 		};
 	}

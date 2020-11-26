@@ -252,4 +252,26 @@ public class AL2000 {
 		return new Client(numCB, mail, max+1);
 	}
 	
+	public Abonne createNewAbonne(String mail, String pwd, String numCB, int credit) {
+		int max = 0;
+		
+		for(Abonne a : this.abonnes) {
+			if(a.getIdc() > max) {
+				max = a.getIdc();
+			}
+		}
+		
+		Abonne res = null;
+		if(credit > 0 ) {
+			try {
+				res = new Abonne(numCB, mail, max+1, credit, pwd);
+			} catch (SubscriptionException e) {
+				e.printStackTrace();
+			}
+		} else {
+			res = new Abonne(numCB, mail, max+1, pwd);
+		}
+		
+		return res;
+	}
 }
