@@ -96,10 +96,39 @@ public class ProfilFrame extends MainFrame {
 		res.add(homeButtonAction(this));
 		res.add(disconnectButtonAction(this));
 		res.add(historique(this));
+		res.add(locations(this));
 
 		return res;
 	}
-	
+	private AbstractAction locations(ProfilFrame me) {
+		return new AbstractAction("Location en cours") {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrame histo = new JFrame("Locations en cours");
+				DefaultListModel<Location> model = new DefaultListModel<>();
+				JList<Location> listeHisto = new JList<>(model);
+				
+				ImagePanel img = new ImagePanel(new Dimension(400, 800), null);
+				
+				JSplitPane splitb = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listeHisto, img);
+
+				
+				listeHisto.addListSelectionListener(new HistoCtrl(img, listeHisto));
+				
+
+				for (Location loc : me.al2000.getCurrentLocation()) {
+					if(loc.getClient() == me.abonne) {
+						model.addElement(loc);
+					}
+				}
+				
+				histo.add(splitb);
+				histo.pack();
+				histo.setVisible(true);
+			}
+		};
+	}
 	private AbstractAction historique(ProfilFrame me) {
 		return new AbstractAction("historique") {
 
