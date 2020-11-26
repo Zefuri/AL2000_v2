@@ -24,7 +24,7 @@ create table Abonne (
 	email varchar(50),
 	numCB varchar(20),
 	mdp varchar(20),
-    credit number(3),
+    credit number(20),
 	constraint Abonne_C primary key (idC)
 );
 

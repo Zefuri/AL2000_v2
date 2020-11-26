@@ -79,7 +79,7 @@ public class TechnicianFrame extends MainFrame {
 				Signalement aDel = listeSign.getSelectedValue();
 				Location loc = aDel.getLocation();
 				if(loc.getClient().estAbonne()) {
-					UpdateBd.updateCredit(null, aDel.getMontant());
+					UpdateBd.updateCredit(((Abonne) loc.getClient()), aDel.getMontant());
 				}
 				JFrame remb = new JFrame("notif");
 				remb.setSize(200, 100);
