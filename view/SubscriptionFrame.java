@@ -10,7 +10,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 
 import model.AL2000;
 import model.Abonne;
@@ -26,7 +28,7 @@ public class SubscriptionFrame extends JFrame {
 	private JTextField mailField;
 	private JPasswordField pwdField;
 	private JPasswordField cardField;
-	private JTextField creditField;
+	private JSpinner creditField;
 	
 	public SubscriptionFrame(AL2000 al2000) {
 		super("AL2000 Subscription");
@@ -79,7 +81,7 @@ public class SubscriptionFrame extends JFrame {
 		
 		JPanel creditPanel = new JPanel();
 		JLabel creditLabel = new JLabel("Credit initial : ");
-		this.creditField = new JTextField();
+		this.creditField = new JSpinner(new SpinnerNumberModel(15, 15, 1000, 5)); 
 		this.creditField.setPreferredSize(new Dimension(200, 25));
 		
 		creditPanel.add(creditLabel);
@@ -110,10 +112,10 @@ public class SubscriptionFrame extends JFrame {
 				String mail = mailField.getText();
 				String pwd = String.copyValueOf(pwdField.getPassword());
 				String card = String.copyValueOf(cardField.getPassword());
-				int credit = Integer.parseInt(creditField.getText());
+				int credit = (Integer) creditField.getValue();
 				
 				Abonne newAbo;
-				if(mail != null && pwd != null && card != null) {
+				if(!mail.isBlank() && !pwd.isBlank() && !card.isBlank()) {
 					newAbo = al2000.createNewAbonne(mail, pwd, card, credit);
 					AddBd.addAbo(newAbo, al2000);
 					
@@ -121,11 +123,12 @@ public class SubscriptionFrame extends JFrame {
 					
 					JFrame validationFrame = new JFrame("Abonnement réussi !");
 					validationFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-					validationFrame.setPreferredSize(new Dimension(400, 200));
+					validationFrame.setPreferredSize(new Dimension(300, 100));
 					
 					JPanel validationMainPanel = new JPanel();
-					validationMainPanel.add(new JLabel("Vous êtes l'abonné n°" + newAbo.getIdc()));
-					validationMainPanel.add(new JLabel("Vous avez été crédité de " + newAbo.getCredit() + "€"));
+				
+					validationMainPanel.add(new JLabel("<html>Vous êtes l'abonné n°" + newAbo.getIdc() +
+							"<br/>Vous avez été crédité de " + newAbo.getCredit() + "€</html>"));
 					
 					validationFrame.add(validationMainPanel);
 					validationFrame.pack();
