@@ -2,7 +2,7 @@ package utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-
+import java.io.InputStream;
 import java.net.URL;
 
 import java.sql.Connection;
@@ -119,19 +119,18 @@ public final class InitBd {
 
 	private static String[] createqueries(String path) {
 		DVD dvd = new DVD(0, null, null, 0, null, null, null, null, false);
-		URL url = dvd.getClass().getResource(path);
-		File data = new File(url.getPath());
+		InputStream is = dvd.getClass().getResourceAsStream(path);
 		String initbd = "";
 		String queries[] = null;
 		try {
-			Scanner reader = new Scanner(data);
+			Scanner reader = new Scanner(is);
 			while (reader.hasNextLine()) {
 				initbd += reader.nextLine();
 			}
 
 			queries = initbd.split(";");
 			reader.close();
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			System.out.println("An error occurred.");
 			e.printStackTrace();
 		}
